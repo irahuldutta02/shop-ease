@@ -1,13 +1,12 @@
-import { Outlet } from "react-router-dom";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
+import { Layout } from "./Layout";
+import { ContextProvider } from "./provider/ContextProvider";
 
 function App() {
   return (
     <>
-      <Header />
-      <Outlet />
-      <Footer />
+      <ContextProvider>
+        <Layout />
+      </ContextProvider>
     </>
   );
 }

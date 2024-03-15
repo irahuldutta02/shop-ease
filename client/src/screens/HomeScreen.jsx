@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Product } from "../components/Product";
 import { getProducts } from "../data/products";
 
 export const HomeScreen = () => {
   const [products] = useState(getProducts());
+
+  useEffect(() => {
+    // scroll to top
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

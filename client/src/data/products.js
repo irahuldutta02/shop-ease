@@ -1,6 +1,6 @@
 export const products = [
   {
-    id: 1,
+    id: "00120f84-e6b2-4a0c-b100-bcbaebed5e47",
     name: "Airpods Wireless Bluetooth Headphones",
     image: "/images/airpods.jpg",
     description:
@@ -13,7 +13,7 @@ export const products = [
     numReviews: 55,
   },
   {
-    id: 2,
+    id: "a8fc1104-fa7c-4fc3-be77-4e84a510a876",
     name: "Smartphone X1",
     image: "/images/smartphone-x1.jpg",
     description:
@@ -26,7 +26,7 @@ export const products = [
     numReviews: 8,
   },
   {
-    id: 3,
+    id: "7faec1ef-9a42-4883-8bcc-ee7e2771054b",
     name: "Laptop ProBook",
     image: "/images/laptop-probook.jpg",
     description:
@@ -39,7 +39,7 @@ export const products = [
     numReviews: 5,
   },
   {
-    id: 4,
+    id: "32dce8d3-c762-40cf-9f36-4d7afa0a21ca",
     name: "Wireless Headphones",
     image: "/images/headphones.jpg",
     description:
@@ -47,12 +47,12 @@ export const products = [
     brand: "BrandZ",
     category: "Headphones",
     price: 149.99,
-    countInStock: 10,
+    countInStock: 25,
     rating: 4.8,
     numReviews: 12,
   },
   {
-    id: 5,
+    id: "db34471a-2020-46b5-8a21-a752cdd07fe1",
     name: "Smart TV 4K",
     image: "/images/smart-tv-4k.jpg",
     description:
@@ -65,7 +65,7 @@ export const products = [
     numReviews: 9,
   },
   {
-    id: 6,
+    id: "26a2bf1e-de4d-465e-a8a4-3e7246d240f1",
     name: "Gaming Console",
     image: "/images/gaming-console.jpg",
     description:
@@ -81,4 +81,9 @@ export const products = [
 
 export const getProducts = () => {
   return products;
+};
+
+export const getProductById = (id) => {
+  const product = products.find((p) => p.id === id);
+  return product;
 };

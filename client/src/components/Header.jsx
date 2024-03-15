@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import {
   IoClose,
@@ -9,10 +9,13 @@ import {
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxDotsHorizontal } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../context";
 
 export const Header = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [smScreen, setSmScreen] = useState(false);
+
+  const { theme, setTheme } = useContext(ThemeContext);
 
   const navigate = useNavigate();
 
@@ -102,22 +105,21 @@ export const Header = () => {
             </div>
 
             {/* theme toggler */}
-            <div className="btn btn-ghost btn-circle">
-              <label className="swap swap-rotate">
-                {/* this hidden checkbox controls the state */}
-                <input
-                  type="checkbox"
-                  className="theme-controller"
-                  value="wireframe"
-                />
-
-                {/* sun icon */}
+            <div
+              onClick={() => {
+                setTheme(theme === "dark" ? "light" : "dark");
+                localStorage.setItem(
+                  "theme",
+                  theme === "dark" ? "light" : "dark"
+                );
+              }}
+              className="btn btn-ghost btn-circle"
+            >
+              {theme === "dark" ? (
                 <IoSunnyOutline size={25} className="swap-off" />
-
-                {/* moon icon */}
-
+              ) : (
                 <IoMoonOutline size={25} className="swap-on" />
-              </label>
+              )}
             </div>
 
             {/* dot menu */}

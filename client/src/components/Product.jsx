@@ -1,18 +1,28 @@
 import { FaPlus } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 export const Product = ({ product }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="card max-w-80 h-[30rem] bg-neutral shadow-xl">
         <figure className="w-full h-45">
           <img
-            src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+            src="https://source.unsplash.com/random/?products"
             alt="Shoes"
           />
         </figure>
 
         <div className="card-body gap-3">
-          <h2 className="card-title">{product.name}</h2>
+          <h2
+            onClick={() => {
+              navigate(`/product/${product.id}`);
+            }}
+            className="card-title cursor-pointer"
+          >
+            {product.name}
+          </h2>
           <div className="card-actions">
             <div className="badge badge-primary">Rating: {product.rating}</div>
             <div className="badge badge-secondary">

@@ -9,8 +9,8 @@ export const Product = ({ product }) => {
       <div className="card max-w-80 h-[30rem] bg-neutral shadow-xl">
         <figure className="w-full h-45">
           <img
-            src="https://source.unsplash.com/random/?products"
-            alt="Shoes"
+            src={`https://source.unsplash.com/random/?${product.name}`}
+            alt="image"
           />
         </figure>
 

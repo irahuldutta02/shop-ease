@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../data/products";
 import { ErrorScreen } from "./ErrorScreen";
 import { LoadingScreen } from "./LoadingScreen";
 
@@ -11,10 +10,21 @@ export const ProductScreen = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    const fetchedProduct = getProductById(id);
-    setProduct(fetchedProduct);
-    setLoading(false);
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_BASE_URL}/api/products/${id}`
+        );
+        const data = await response.json();
+        setProduct(data.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
   }, [id]);
 
   useEffect(() => {
@@ -31,8 +41,8 @@ export const ProductScreen = () => {
             <div className="w-full bg-neutral rounded-lg shadow-xl p-8 flex justify-center items-center gap-4 flex-col md:flex-row">
               <div className="flex-1 h-80 flex justify-center items-center">
                 <img
-                  src="https://source.unsplash.com/random/?products"
-                  alt="Shoes"
+                  src={`https://source.unsplash.com/random/?${product?.name}`}
+                  alt="image"
                   className="max-h-80 max-w-80 object-cover rounded-lg shadow-xl"
                 />
               </div>

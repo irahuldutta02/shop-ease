@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { IoClose, IoMenu } from "react-icons/io5";
+import {
+  IoClose,
+  IoMenu,
+  IoMoonOutline,
+  IoSunnyOutline,
+} from "react-icons/io5";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxDotsHorizontal } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +36,7 @@ export const Header = () => {
     <>
       <div className="flex justify-center items-center fixed w-full z-[10] bg-neutral">
         <div className="navbar bg-neutral  max-w-6xl">
+          {/* sm screen menu */}
           {smScreen && (
             <div className="flex-none">
               <button
@@ -42,7 +48,8 @@ export const Header = () => {
             </div>
           )}
 
-          <div className="flex-1 flex justify-start items-center">
+          {/* logo */}
+          <div className="flex-1">
             <img
               src="/assets/logo-rectangle.svg"
               alt="logo"
@@ -52,7 +59,9 @@ export const Header = () => {
               }}
             />
           </div>
+
           <div className="flex-none flex gap-4">
+            {/* search bar */}
             {!smScreen && (
               <div className="flex justify-center items-center">
                 <label className="input input-bordered flex items-center gap-2">
@@ -63,6 +72,8 @@ export const Header = () => {
                 </label>
               </div>
             )}
+
+            {/* cart */}
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
@@ -82,13 +93,34 @@ export const Header = () => {
                   <span className="font-bold text-lg">8 Items</span>
                   <span className="text-info">Subtotal: $999</span>
                   <div className="card-actions">
-                    <button className="btn btn-primary btn-block">
+                    <button className="btn btn-sm btn-primary btn-block">
                       View cart
                     </button>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* theme toggler */}
+            <div className="btn btn-ghost btn-circle">
+              <label className="swap swap-rotate">
+                {/* this hidden checkbox controls the state */}
+                <input
+                  type="checkbox"
+                  className="theme-controller"
+                  value="wireframe"
+                />
+
+                {/* sun icon */}
+                <IoSunnyOutline size={25} className="swap-off" />
+
+                {/* moon icon */}
+
+                <IoMoonOutline size={25} className="swap-on" />
+              </label>
+            </div>
+
+            {/* dot menu */}
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
@@ -121,6 +153,7 @@ export const Header = () => {
         </div>
       </div>
 
+      {/* sm screen search bar menu */}
       {smScreen && openDrawer && (
         <div className="bg-neutral rounded-lg fixed w-full flex justify-center items-center p-4 pt-20 z-[9]">
           <label className="input input-bordered flex items-center gap-2">

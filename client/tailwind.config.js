@@ -9,7 +9,6 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["coffee"],
-    // themes: ["wireframe"],
+    themes: ["coffee", "wireframe"],
   },
 };

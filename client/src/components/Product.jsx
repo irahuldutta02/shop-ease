@@ -19,7 +19,11 @@ export const Product = ({ product }) => {
               Reviews: {product.numReviews}
             </div>
           </div>
-          <p>{product.description.substring(0, 90)}</p>
+          <p>
+            {product.description.length > 90
+              ? product.description.substring(0, 90).trim() + "..."
+              : product.description}
+          </p>
           <div className="card-actions items-center justify-end">
             <div className="">${product.price}</div>
             <button className="btn btn-sm btn-accent">Buy Now</button>

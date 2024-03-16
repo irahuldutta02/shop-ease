@@ -3,8 +3,10 @@ import cors from "cors";
 import express from "express";
 import { PORT } from "./config/server.config.js";
 import { getProductById, getProducts } from "./data/products.js";
+import connectDB from "./db/db.js";
 
 const app = express();
+connectDB();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

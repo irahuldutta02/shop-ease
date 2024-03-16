@@ -35,7 +35,7 @@ export const HomeScreen = () => {
           <div className="flex justify-center items-center flex-col w-full max-w-6xl ">
             <div className="flex gap-4 items-center justify-center flex-wrap p-4">
               {products.map((product) => (
-                <Product key={product.id} product={product} />
+                <Product key={product._id} product={product} />
               ))}
             </div>
           </div>

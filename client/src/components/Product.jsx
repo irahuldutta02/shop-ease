@@ -17,7 +17,7 @@ export const Product = ({ product }) => {
         <div className="card-body gap-3">
           <h2
             onClick={() => {
-              navigate(`/product/${product.id}`);
+              navigate(`/product/${product._id}`);
             }}
             className="card-title cursor-pointer"
           >

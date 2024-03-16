@@ -2,8 +2,11 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import { PORT } from "./config/server.config.js";
-import { getProductById, getProducts } from "./data/products.js";
+// import products from "./data/products.js";
 import connectDB from "./db/db.js";
+import Product from "./models/product.model.js";
+
+import productRoutes from "./routes/product.routes.js";
 
 const app = express();
 connectDB();
@@ -18,18 +21,7 @@ app.get("/", (req, res) => {
   return res.status(200).send({ status: 200, message: "Server is up!" });
 });
 
-app.get("/api/products", (req, res) => {
-  return res.status(200).send({ status: 200, data: getProducts() });
-});
-
-app.get("/api/products/:id", (req, res) => {
-  const productId = req.params.id;
-  const product = getProductById(productId);
-  if (product) {
-    return res.status(200).send({ status: 200, data: product });
-  }
-  return res.status(404).send({ status: 404, message: "Product not found" });
-});
+app.use("/api/products", productRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

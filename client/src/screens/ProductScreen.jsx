@@ -3,6 +3,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
 import { ErrorScreen } from "./ErrorScreen";
 import { LoadingScreen } from "./LoadingScreen";
+import axios from "axios";
 
 export const ProductScreen = () => {
   const { id } = useParams();
@@ -13,10 +14,8 @@ export const ProductScreen = () => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_BASE_URL}/api/products/${id}`
-        );
-        const data = await response.json();
+        const response = await axios.get(`/api/products/${id}`);
+        const { data } = response;
         setProduct(data.data);
       } catch (error) {
         console.error(error);

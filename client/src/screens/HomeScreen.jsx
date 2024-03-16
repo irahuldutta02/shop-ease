@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Product } from "../components/Product";
 import { LoadingScreen } from "./LoadingScreen";
+import axios from "axios";
 
 export const HomeScreen = () => {
   const [products, setProducts] = useState([]);
@@ -15,10 +16,8 @@ export const HomeScreen = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_BASE_URL}/api/products`
-        );
-        const data = await response.json();
+        const response = await axios.get(`/api/products`);
+        const { data } = response;
         setProducts(data.data);
       } catch (error) {
         console.error(error);

@@ -1,0 +1,15 @@
+{
+  "name": "shop-ease",
+  "version": "1.0.0",
+  "description": "A e-commerce web app.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

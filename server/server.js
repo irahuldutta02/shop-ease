@@ -2,7 +2,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import { PORT } from "./config/server.config.js";
-import { getProductById, getProducts } from "./src/data/products.js";
+import { getProductById, getProducts } from "./data/products.js";
 
 const app = express();
 

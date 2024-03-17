@@ -2,9 +2,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import { PORT } from "./config/server.config.js";
-// import products from "./data/products.js";
 import connectDB from "./db/db.js";
-import Product from "./models/product.model.js";
+import { errorHandler, notFound } from "./middleware/error.middleware.js";
 
 import productRoutes from "./routes/product.routes.js";
 
@@ -22,6 +21,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

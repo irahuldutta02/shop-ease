@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FaHeartBroken } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +8,10 @@ export const ErrorScreen = ({
   status = 404,
 }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

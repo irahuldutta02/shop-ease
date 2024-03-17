@@ -8,6 +8,7 @@ import {
 } from "react-icons/io5";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxDotsHorizontal } from "react-icons/rx";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../context";
 
@@ -18,6 +19,8 @@ export const Header = () => {
   const { theme, setTheme } = useContext(ThemeContext);
 
   const navigate = useNavigate();
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 640px)");
@@ -85,22 +88,39 @@ export const Header = () => {
               >
                 <div className="indicator">
                   <MdOutlineShoppingCart size={25} />
-                  <span className="badge badge-sm indicator-item">8</span>
+                  <span className="badge badge-sm indicator-item">
+                    {cart?.cartItems?.length}
+                  </span>
                 </div>
               </div>
               <div
                 tabIndex={0}
                 className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow"
               >
-                <div className="card-body">
-                  <span className="font-bold text-lg">8 Items</span>
-                  <span className="text-info">Subtotal: $999</span>
-                  <div className="card-actions">
-                    <button className="btn btn-sm btn-primary btn-block">
-                      View cart
-                    </button>
+                {cartItems.length > 0 ? (
+                  <div className="card-body">
+                    <span className="font-bold text-lg">
+                      {cart?.cartItems?.length} Items
+                    </span>
+                    <span className="text-info">
+                      Subtotal: ${cart?.totalPrice}
+                    </span>
+                    <div className="card-actions">
+                      <button
+                        onClick={() => {
+                          navigate("/cart");
+                        }}
+                        className="btn btn-sm btn-primary btn-block"
+                      >
+                        View cart
+                      </button>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="card-body text-center">
+                    <p>Add some items to the Cart</p>
+                  </div>
+                )}
               </div>
             </div>
 

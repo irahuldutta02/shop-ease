@@ -1,14 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaShareAlt } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
-import { Link, useParams } from "react-router-dom";
+import { IoHomeOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetProductDetailsQuery } from "../slices/productApiSlice";
 import { ErrorScreen } from "./ErrorScreen";
 import { LoadingScreen } from "./LoadingScreen";
-import { IoHomeOutline } from "react-icons/io5";
+import { addToCart } from "../slices/cartSlice";
 
 export const ProductScreen = () => {
   const { id } = useParams();
+
+  const [quantity, setQuantity] = useState(1);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { data, isLoading, error } = useGetProductDetailsQuery(id);
   const product = data?.data;
@@ -24,6 +32,11 @@ export const ProductScreen = () => {
     }
   }, [error]);
 
+  const addToCartHandler = () => {
+    dispatch(addToCart({ ...product, qty: Number(quantity) }));
+    navigate("/cart");
+  };
+
   return (
     <>
       {isLoading ? (
@@ -38,6 +51,7 @@ export const ProductScreen = () => {
         <div className="min-h-screen w-full flex justify-center items-start pt-20 pb-20">
           <div className="flex justify-center items-center w-full max-w-4xl p-4">
             <div className="w-full bg-neutral rounded-lg shadow-xl p-8 flex justify-center items-center gap-4 flex-col">
+              {/* breadcrumbs */}
               <div className="text-sm breadcrumbs flex justify-start w-full overflow-hidden">
                 <ul>
                   <li>
@@ -50,17 +64,28 @@ export const ProductScreen = () => {
                     </Link>
                   </li>
                   <li>
-                    <a>{product?.name}</a>
+                    <Link to={`/product/${product?._id}`}>{product?.name}</Link>
                   </li>
                 </ul>
               </div>
-              <div className="flex-1 h-80 flex justify-center items-center">
+              {/* image and share btn */}
+              <div className="flex-1 relative w-full h-80 flex justify-center items-center">
                 <img
                   src={product?.image}
                   alt="image"
                   className="max-h-96 object-cover rounded-lg shadow-xl"
                 />
+                <button
+                  className="btn btn-sm btn-outline absolute top-4 right-4"
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    toast.success("Link copied to clipboard");
+                  }}
+                >
+                  <FaShareAlt />
+                </button>
               </div>
+              {/* Description and actions */}
               <div className="flex-1 w-full flex flex-col gap-4 justify-between">
                 <div className="flex w-full flex-col gap-4">
                   <h2 className="text-3xl font-bold">{product?.name}</h2>
@@ -81,20 +106,22 @@ export const ProductScreen = () => {
                   <div className="text-2xl font-bold">${product?.price}</div>
                 </div>
                 <div className="flex w-full gap-4 items-center justify-end">
-                  <select className="select select-bordered select-sm w-20">
-                    <option disabled>Quantity</option>
-                    {[
-                      ...Array(
-                        product?.countInStock > 5 ? 5 : product?.countInStock
-                      ).keys(),
-                    ].map((x) => (
-                      <option key={x + 1} value={x + 1}>
-                        {x + 1}
-                      </option>
-                    ))}
-                  </select>
+                  {/* quantity */}
+                  <input
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    type="number"
+                    placeholder="Quantity"
+                    className="grow input input-sm input-bordered max-w-20"
+                    max={product?.countInStock}
+                    min={1}
+                  />
                   <button className="btn btn-sm btn-accent">Buy Now</button>
-                  <button className="btn btn-sm btn-primary">
+                  {/* Add to cart */}
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={addToCartHandler}
+                  >
                     <FaPlus />
                   </button>
                 </div>

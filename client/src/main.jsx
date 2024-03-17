@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import {
   Route,
   RouterProvider,
@@ -10,6 +11,7 @@ import "./index.css";
 import { ErrorScreen } from "./screens/ErrorScreen.jsx";
 import { HomeScreen } from "./screens/HomeScreen.jsx";
 import { ProductScreen } from "./screens/ProductScreen.jsx";
+import store from "./store.js";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,5 +24,7 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

@@ -6,9 +6,14 @@ export const Product = ({ product }) => {
 
   return (
     <>
-      <div className="card max-w-80 h-[30rem] bg-neutral shadow-xl">
-        <figure className="w-full h-45">
-          <img src={product?.image} alt="image" />
+      <div className="card max-w-80 h-[30rem] bg-neutral shadow-xl ">
+        <figure
+          className="w-full h-45 p-4 pb-0 cursor-pointer"
+          onClick={() => {
+            navigate(`/product/${product._id}`);
+          }}
+        >
+          <img src={product?.image} alt="image" className="h-full rounded-lg" />
         </figure>
 
         <div className="card-body gap-3">

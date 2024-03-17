@@ -40,7 +40,7 @@ export const ProductScreen = () => {
             <div className="w-full bg-neutral rounded-lg shadow-xl p-8 flex justify-center items-center gap-4 flex-col md:flex-row">
               <div className="flex-1 h-80 flex justify-center items-center">
                 <img
-                  src={`https://source.unsplash.com/random/?${product?.name}`}
+                  src={product?.image}
                   alt="image"
                   className="max-h-80 max-w-80 object-cover rounded-lg shadow-xl"
                 />

@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { removeFromCart } from "../slices/cartSlice";
+import { useDispatch } from "react-redux";
 
 export const CartScreen = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
   const totalQuantity = Number(
@@ -13,6 +17,17 @@ export const CartScreen = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleDeleteItem = (productId) => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
+    if (confirm) {
+      dispatch(removeFromCart(productId));
+    }
+  };
+
+  const checkoutHandler = () => {};
 
   return (
     <>
@@ -52,7 +67,14 @@ export const CartScreen = () => {
                       </div>
                     </div>
                     <div className="flex justify-center items-center">
-                      <button className="btn btn-sm">Remove</button>
+                      <button
+                        onClick={() => {
+                          handleDeleteItem(product._id);
+                        }}
+                        className="btn btn-sm"
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -106,7 +128,11 @@ export const CartScreen = () => {
                           </h1>
                         </div>
                       </div>
-                      <button className="btn btn-sm btn-primary">
+                      <button
+                        onClick={checkoutHandler}
+                        className="btn btn-sm btn-primary"
+                        disabled={cartItems.length === 0}
+                      >
                         Proceed to Checkout
                       </button>
                     </div>

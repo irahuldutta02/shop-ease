@@ -48,7 +48,15 @@ export const CartScreen = () => {
   return (
     <>
       {showCartConfirmModal && (
-        <ConfirmModal handleConfirmation={handleConfirmation} />
+        <ConfirmModal
+          handleConfirmation={handleConfirmation}
+          message="Are you sure you want to delete the item form cart?"
+          title="Remove Item from Cart"
+          option={{
+            true: "Yes",
+            false: "No",
+          }}
+        />
       )}
       <div className="min-h-screen flex justify-start items-center flex-col p-4 pt-20 pb-10">
         <div className="flex justify-center items-center flex-col w-full max-w-6xl gap-8">

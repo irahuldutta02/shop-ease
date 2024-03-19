@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { removeFromCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
+import { ConfirmModal } from "../components/ConfirmModal";
+import { CartConfirmModalContext } from "../context";
 
 export const CartScreen = () => {
   const navigate = useNavigate();
@@ -14,15 +16,29 @@ export const CartScreen = () => {
     cartItems.reduce((acc, item) => acc + item.qty, 0).toFixed(2)
   );
 
+  const [productToDelete, setProductToDelete] = useState(null);
+
+  const {
+    showCartConfirmModal,
+    setShowCartConfirmModal,
+    doNotShowAgainCartModal,
+  } = useContext(CartConfirmModalContext);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const handleConfirmation = (answer) => {
+    if (answer) {
+      dispatch(removeFromCart(productToDelete));
+    }
+  };
+
   const handleDeleteItem = (productId) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this item?"
-    );
-    if (confirm) {
+    setProductToDelete(productId);
+    if (!doNotShowAgainCartModal) {
+      setShowCartConfirmModal(true);
+    } else {
       dispatch(removeFromCart(productId));
     }
   };
@@ -31,6 +47,9 @@ export const CartScreen = () => {
 
   return (
     <>
+      {showCartConfirmModal && (
+        <ConfirmModal handleConfirmation={handleConfirmation} />
+      )}
       <div className="min-h-screen flex justify-start items-center flex-col p-4 pt-20 pb-10">
         <div className="flex justify-center items-center flex-col w-full max-w-6xl gap-8">
           <div className="w-full flex flex-col justify-center items-center">

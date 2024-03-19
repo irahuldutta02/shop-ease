@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ThemeContext } from "../context";
+import { CartConfirmModalContext, ThemeContext } from "../context";
 
 export const ContextProvider = ({ children }) => {
   const getThemeFromLocalStorage = localStorage.getItem("theme");
@@ -8,10 +8,22 @@ export const ContextProvider = ({ children }) => {
   }
   const [theme, setTheme] = useState(getThemeFromLocalStorage);
 
+  const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
+  const [doNotShowAgainCartModal, setDoNotShowAgainCartModal] = useState(false);
+
   return (
     <>
       <ThemeContext.Provider value={{ theme, setTheme }}>
-        {children}
+        <CartConfirmModalContext.Provider
+          value={{
+            showCartConfirmModal,
+            setShowCartConfirmModal,
+            doNotShowAgainCartModal,
+            setDoNotShowAgainCartModal,
+          }}
+        >
+          {children}
+        </CartConfirmModalContext.Provider>
       </ThemeContext.Provider>
     </>
   );

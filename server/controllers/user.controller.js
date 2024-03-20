@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
+import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -111,4 +113,99 @@ const logOutUser = asyncHandler((req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-export { loginUser, registerUser, updateUserProfile, logOutUser };
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const resetToken = user.createResetToken();
+    user.save();
+
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/users/reset-password/${resetToken}`;
+
+    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetUrl}.\nIf you didn't forget your password, please ignore this email!`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "ShopEase: Your password reset token (valid for 10 minutes)",
+        message,
+      });
+
+      res.status(200).json({
+        status: 200,
+        message: "Token sent to email!",
+      });
+    } catch (error) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      user.save();
+      res.status(500).json({
+        status: 500,
+        message: "There was an error sending the email. Try again later!",
+      });
+    }
+  } catch (error) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  try {
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.resetToken)
+      .digest("hex");
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        status: 400,
+        message: "Token is invalid or has expired",
+      });
+    }
+
+    user.password = req.body.password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    generateToken(res, user._id);
+
+    res.status(200).json({
+      status: 200,
+      message: "Password reset successful",
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Invalid token");
+  }
+});
+
+export {
+  forgotPassword,
+  logOutUser,
+  loginUser,
+  registerUser,
+  updateUserProfile,
+  resetPassword,
+};

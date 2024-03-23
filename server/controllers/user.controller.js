@@ -68,7 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     res.status(400);
-    throw new Error("Invalid user data");
+    throw new Error(error?.message || "Something went wrong");
   }
 });
 

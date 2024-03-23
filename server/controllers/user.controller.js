@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
+import { CLIENT_URL } from "../config/server.config.js";
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -127,11 +128,9 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const resetToken = user.createResetToken();
     user.save();
 
-    const resetUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/api/users/reset-password/${resetToken}`;
+    const resetUrl = `${CLIENT_URL}/reset-password/${resetToken}`;
 
-    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetUrl}.\nIf you didn't forget your password, please ignore this email!`;
+    const message = `Forgot your password? Click here to rest your password: ${resetUrl}\nIf you have not made this request, please ignore this email!`;
 
     try {
       await sendEmail({

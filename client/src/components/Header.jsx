@@ -166,6 +166,20 @@ export const Header = () => {
                 <li>
                   <a>Settings</a>
                 </li>
+                <li
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  <a>LogIn</a>
+                </li>
+                <li
+                  onClick={() => {
+                    navigate("/signup");
+                  }}
+                >
+                  <a>SignUp</a>
+                </li>
                 <li>
                   <a>Logout</a>
                 </li>

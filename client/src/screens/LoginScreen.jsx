@@ -123,7 +123,7 @@ export const LoginScreen = () => {
                   className="btn btn-sm flex-1 btn-accent"
                 >
                   <FcGoogle />
-                  Signin with Google
+                  Google
                 </button>
                 <button
                   onClick={handleLogin}

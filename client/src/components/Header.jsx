@@ -21,6 +21,65 @@ export const Header = () => {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  const { userInfo } = useSelector((state) => state.user);
+
+  const renderProfileMenu = () => {
+    return (
+      <>
+        <div className="dropdown dropdown-end">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost flex justify-center items-center btn-circle avatar rounded-full overflow-hidden"
+          >
+            <RxDotsHorizontal size={25} />
+          </div>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-48 flex justify-center items-center gap-2"
+          >
+            {userInfo && (
+              <li className="w-full">
+                <div className="btn btn-sm w-full">
+                  {userInfo?.name.length > 14
+                    ? userInfo?.name.slice(0, 14) + "..."
+                    : userInfo?.name}
+                  {userInfo?.isAdmin && (
+                    <div className="badge badge-primary">A</div>
+                  )}
+                </div>
+              </li>
+            )}
+            {!userInfo && (
+              <>
+                <li
+                  className="w-full flex justify-center items-center"
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  <a className="w-full flex justify-center">LogIn</a>
+                </li>
+                <li
+                  className="w-full flex justify-center items-center"
+                  onClick={() => {
+                    navigate("/signup");
+                  }}
+                >
+                  <a className="w-full flex justify-center">SignUp</a>
+                </li>
+              </>
+            )}
+            {userInfo && (
+              <li className="w-full flex justify-center items-center">
+                <a className="w-full flex justify-center">Logout</a>
+              </li>
+            )}
+          </ul>
+        </div>
+      </>
+    );
+  };
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 640px)");
@@ -143,48 +202,7 @@ export const Header = () => {
             </div>
 
             {/* dot menu */}
-            <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost flex justify-center items-center btn-circle avatar rounded-full overflow-hidden"
-              >
-                {/* <img
-                src="https://i.postimg.cc/Ghyh5hDN/ai-image-rahuldutta-4.jpg"
-                alt="profile-image"
-                width={"100%"}
-              /> */}
-                <RxDotsHorizontal size={25} />
-              </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box"
-              >
-                <li>
-                  <a className="justify-between">Profile</a>
-                </li>
-                <li>
-                  <a>Settings</a>
-                </li>
-                <li
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                >
-                  <a>LogIn</a>
-                </li>
-                <li
-                  onClick={() => {
-                    navigate("/signup");
-                  }}
-                >
-                  <a>SignUp</a>
-                </li>
-                <li>
-                  <a>Logout</a>
-                </li>
-              </ul>
-            </div>
+            {renderProfileMenu()}
           </div>
         </div>
       </div>

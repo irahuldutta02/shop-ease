@@ -3,7 +3,10 @@ import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useLoginMutation } from "../slices/userApiSlice";
+import {
+  useLoginMutation,
+  useForgotPasswordMutation,
+} from "../slices/userApiSlice";
 import { setCredentials } from "../slices/userSlice";
 
 export const LoginScreen = () => {
@@ -14,18 +17,45 @@ export const LoginScreen = () => {
   const [password, setPassword] = useState("");
 
   const [login, { isLoading }] = useLoginMutation();
+  const [forgotPassword, { isLoading: isLoadingPassword }] =
+    useForgotPasswordMutation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (email === "" || password === "") {
+      toast.error("Please enter your email and password");
+      return;
+    }
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res.data }));
       toast.success("Login Successful");
       navigate("/");
     } catch (error) {
-      console.error(error);
       toast.error(
-        error?.data?.message || error?.message || "An error occurred"
+        error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          "An error occurred"
+      );
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (email === "") {
+      toast.error("Please enter your email");
+      return;
+    }
+    try {
+      const res = await forgotPassword({ email }).unwrap();
+      toast.success(res.message);
+    } catch (error) {
+      toast.error(
+        error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          "An error occurred"
       );
     }
   };
@@ -65,14 +95,16 @@ export const LoginScreen = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <label className="label">
-                  <a
-                    onClick={() => {
-                      navigate("/forgot-password");
-                    }}
-                    className="label-text-alt link link-hover"
-                  >
-                    Forgot password?
-                  </a>
+                  {isLoadingPassword ? (
+                    <span className="loading loading-dots loading-sm"></span>
+                  ) : (
+                    <a
+                      onClick={handleForgotPassword}
+                      className="label-text-alt link link-hover"
+                    >
+                      Forgot Password?
+                    </a>
+                  )}
                   <a
                     onClick={() => {
                       navigate("/signup");
@@ -95,7 +127,7 @@ export const LoginScreen = () => {
                 </button>
                 <button
                   onClick={handleLogin}
-                  className="btn btn-sm btn-primary"
+                  className="btn btn-sm btn-primary min-w-[6rem]"
                   disabled={isLoading}
                 >
                   {isLoading ? (

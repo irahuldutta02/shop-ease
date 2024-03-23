@@ -1,19 +1,55 @@
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import { useRegisterMutation } from "../slices/userApiSlice";
+import { setCredentials } from "../slices/userSlice";
 
 export const SignupScreen = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+
+  const [register, { isLoading }] = useRegisterMutation();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (email === "" || password === "" || name === "") {
+      toast.error("Please fill all fields");
+      return;
+    }
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+
+    try {
+      const res = await register({ email, password, name }).unwrap();
+      console.log(res);
+      dispatch(setCredentials({ ...res.data }));
+      toast.success("Registration Successful");
+      navigate("/");
+    } catch (error) {
+      toast.error(
+        error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          "An error occurred"
+      );
+    }
+  };
 
   return (
     <>
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col w-full">
           <div className="card shrink-0 w-full max-w-80 md:max-w-96 shadow-2xl bg-base-100">
-            <form className="card-body">
+            <form className="card-body" onSubmit={handleRegister}>
               <div className="w-full flex justify-center items-center text-3xl text-center">
                 <h1>SignUp</h1>
               </div>
@@ -76,7 +112,17 @@ export const SignupScreen = () => {
                   <FcGoogle />
                   Google
                 </button>
-                <button className="btn btn-sm btn-primary">SignUp</button>
+                <button
+                  onClick={handleRegister}
+                  className="btn btn-sm btn-primary min-w-[6rem]"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <span className="loading loading-dots loading-sm"></span>
+                  ) : (
+                    "SignUp"
+                  )}
+                </button>
               </div>
             </form>
           </div>

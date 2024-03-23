@@ -10,7 +10,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { CartScreen } from "./screens/CartScreen.jsx";
 import { ErrorScreen } from "./screens/ErrorScreen.jsx";
-import { ForgotPass } from "./screens/ForgotPass.jsx";
+import { ResetPass } from "./screens/ResetPass.jsx";
 import { HomeScreen } from "./screens/HomeScreen.jsx";
 import { LoginScreen } from "./screens/LoginScreen.jsx";
 import { ProductScreen } from "./screens/ProductScreen.jsx";
@@ -25,7 +25,7 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
-      <Route path="/forgot-password" element={<ForgotPass />} />
+      <Route path="/reset-password/:resetToken" element={<ResetPass />} />
       <Route path="*" element={<ErrorScreen />} />
     </Route>
   )

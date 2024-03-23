@@ -9,8 +9,12 @@ import {
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxDotsHorizontal } from "react-icons/rx";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../context";
+import toast from "react-hot-toast";
+import { useLogoutMutation } from "../slices/userApiSlice";
+import { logout } from "../slices/userSlice";
 
 export const Header = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -19,9 +23,28 @@ export const Header = () => {
   const { theme, setTheme } = useContext(ThemeContext);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
   const { userInfo } = useSelector((state) => state.user);
+  const [logoutApi, { isLoading }] = useLogoutMutation();
+
+  const handleLogOut = async () => {
+    try {
+      const res = await logoutApi().unwrap();
+      toast.success(res.message);
+      dispatch(logout());
+      navigate("/");
+    } catch (error) {
+      toast.error(
+        error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          "An error occurred"
+      );
+    }
+  };
 
   const renderProfileMenu = () => {
     return (
@@ -72,7 +95,16 @@ export const Header = () => {
             )}
             {userInfo && (
               <li className="w-full flex justify-center items-center">
-                <a className="w-full flex justify-center">Logout</a>
+                <a
+                  onClick={handleLogOut}
+                  className="w-full flex justify-center"
+                >
+                  {isLoading ? (
+                    <span className="loading loading-dots loading-sm"></span>
+                  ) : (
+                    "Logout"
+                  )}
+                </a>
               </li>
             )}
           </ul>

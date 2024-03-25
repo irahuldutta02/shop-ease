@@ -1,12 +1,13 @@
 import { toast } from "react-hot-toast";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { GoShoppingComponents } from "../components/GoShoppingComponents";
 import { clearCart } from "../slices/cartSlice";
 import { useCreateOrderMutation } from "../slices/orderApiSlice";
 
 export const PlaceOrderScreen = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
@@ -49,25 +50,7 @@ export const PlaceOrderScreen = () => {
   };
 
   if (cartItems.length === 0) {
-    return (
-      <div className="flex justify-start items-center flex-col gap-4 w-full min-h-screen pt-20 pb-10">
-        <div className="flex justify-start items-center flex-col gap-4 w-full max-w-6xl p-4">
-          <div className="flex justify-center items-center flex-col gap-4 w-full">
-            <div className="flex justify-center items-center flex-col gap-4 w-full">
-              <h1 className="text-xl font-bold">Your Cart is Empty</h1>
-              <div className="flex justify-center items-center flex-col gap-4 w-full">
-                <button
-                  onClick={() => navigate("/")}
-                  className="btn btn-sm btn-primary"
-                >
-                  Go Shopping
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <GoShoppingComponents />;
   }
 
   return (

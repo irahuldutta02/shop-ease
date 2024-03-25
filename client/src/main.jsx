@@ -7,19 +7,19 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import App from "./App.jsx";
+import { PrivateRoutes } from "./components/PrivateRoutes.jsx";
 import "./index.css";
 import { CartScreen } from "./screens/CartScreen.jsx";
 import { ErrorScreen } from "./screens/ErrorScreen.jsx";
 import { HomeScreen } from "./screens/HomeScreen.jsx";
 import { LoginScreen } from "./screens/LoginScreen.jsx";
 import { PaymentScreen } from "./screens/PaymentScreen.jsx";
+import { PlaceOrderScreen } from "./screens/PlaceOrderScreen.jsx";
 import { ProductScreen } from "./screens/ProductScreen.jsx";
 import { ResetPass } from "./screens/ResetPass.jsx";
 import { ShippingScreen } from "./screens/ShippingScreen.jsx";
 import { SignupScreen } from "./screens/SignupScreen.jsx";
 import store from "./store.js";
-import { PrivateRoutes } from "./components/PrivateRoutes.jsx";
-import { PlaceOrderScreen } from "./screens/PlaceOrderScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

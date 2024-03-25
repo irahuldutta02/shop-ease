@@ -4,6 +4,7 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { saveShippingAddress } from "../slices/cartSlice";
+import { GoShoppingComponents } from "../components/GoShoppingComponents";
 
 export const ShippingScreen = () => {
   const dispatch = useDispatch();
@@ -50,25 +51,7 @@ export const ShippingScreen = () => {
   };
 
   if (cartItems.length === 0) {
-    return (
-      <div className="flex justify-start items-center flex-col gap-4 w-full min-h-screen pt-20 pb-10">
-        <div className="flex justify-start items-center flex-col gap-4 w-full max-w-6xl p-4">
-          <div className="flex justify-center items-center flex-col gap-4 w-full">
-            <div className="flex justify-center items-center flex-col gap-4 w-full">
-              <h1 className="text-xl font-bold">Your Cart is Empty</h1>
-              <div className="flex justify-center items-center flex-col gap-4 w-full">
-                <button
-                  onClick={() => navigate("/")}
-                  className="btn btn-sm btn-primary"
-                >
-                  Go Shopping
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <GoShoppingComponents />;
   }
 
   return (

@@ -9,6 +9,7 @@ import { errorHandler, notFound } from "./middleware/error.middleware.js";
 import productRoutes from "./routes/product.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import orderRoutes from "./routes/oder.routes.js";
 
 import passport from "./utils/passport.js";
 
@@ -42,6 +43,7 @@ app.get("/", (req, res) => {
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/auth", authRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

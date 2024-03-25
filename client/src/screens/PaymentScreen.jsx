@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { savePaymentMethod } from "../slices/cartSlice";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 export const PaymentScreen = () => {
   const cart = useSelector((state) => state.cart);
@@ -46,6 +46,26 @@ export const PaymentScreen = () => {
     <>
       <div className="flex justify-start items-center flex-col gap-4 w-full min-h-screen pt-20 pb-10">
         <div className="flex justify-start items-center flex-col gap-4 w-full max-w-6xl p-4">
+          {/* breadcrumbs */}
+          <div className="text-sm breadcrumbs flex justify-start w-full">
+            <ul>
+              <li>
+                <Link
+                  to={"/cart"}
+                  className=" flex justify-center items-center gap-2"
+                >
+                  <MdOutlineShoppingCart />
+                  Cart
+                </Link>
+              </li>
+              <li>
+                <Link to={`/shipping`}>Shipping</Link>
+              </li>
+              <li>
+                <Link to={`/payment`}>Payment Mode</Link>
+              </li>
+            </ul>
+          </div>
           <div className="flex gap-8 justify-center items-center w-full max-w-80 md:max-w-96 flex-col p-4 bg-neutral shadow-xl rounded-lg ">
             <div className="flex text-3xl w-full justify-center items-center text-center">
               <h1>Payment Method</h1>

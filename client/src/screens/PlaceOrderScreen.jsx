@@ -1,9 +1,9 @@
-import { useCreateOrderMutation } from "../slices/orderApiSlice";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { clearCart } from "../slices/cartSlice";
+import { useCreateOrderMutation } from "../slices/orderApiSlice";
 
 export const PlaceOrderScreen = () => {
   const navigate = useNavigate();
@@ -75,9 +75,34 @@ export const PlaceOrderScreen = () => {
       <div className="flex justify-start items-center flex-col gap-4 w-full min-h-screen pt-20 pb-10">
         <div className="flex justify-start items-center flex-col gap-4 w-full max-w-6xl p-4">
           <div className="flex flex-col justify-center items-center w-full gap-8">
+            {/* breadcrumbs */}
+            <div className="text-sm breadcrumbs flex justify-start w-full">
+              <ul>
+                <li>
+                  <Link
+                    to={"/cart"}
+                    className=" flex justify-center items-center gap-2"
+                  >
+                    <MdOutlineShoppingCart />
+                    Cart
+                  </Link>
+                </li>
+                <li>
+                  <Link to={`/shipping`}>Shipping</Link>
+                </li>
+                <li>
+                  <Link to={`/payment`}>Payment Mode</Link>
+                </li>
+                <li>
+                  <Link to={`/place-order`}>Place Order</Link>
+                </li>
+              </ul>
+            </div>
+
             <div className="w-full flex justify-center items-center text-center">
               <h1 className="text-3xl font-bold">Place Order</h1>
             </div>
+
             <div className="flex justify-center items-center flex-col w-full gap-4">
               <div className="w-full flex justify-center items-center">
                 <div className="overflow-x-auto w-full max-w-80 md:max-w-96 flex flex-col gap-4">

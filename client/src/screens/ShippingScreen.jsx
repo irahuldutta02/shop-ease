@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { saveShippingAddress } from "../slices/cartSlice";
 import { toast } from "react-hot-toast";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { saveShippingAddress } from "../slices/cartSlice";
 
 export const ShippingScreen = () => {
   const dispatch = useDispatch();
@@ -74,6 +75,23 @@ export const ShippingScreen = () => {
     <>
       <div className="flex justify-start items-center flex-col gap-4 w-full min-h-screen pt-20 pb-10">
         <div className="flex justify-start items-center flex-col gap-4 w-full max-w-6xl p-4">
+          {/* breadcrumbs */}
+          <div className="text-sm breadcrumbs flex justify-start w-full">
+            <ul>
+              <li>
+                <Link
+                  to={"/cart"}
+                  className=" flex justify-center items-center gap-2"
+                >
+                  <MdOutlineShoppingCart />
+                  Cart
+                </Link>
+              </li>
+              <li>
+                <Link to={`/shipping`}>Shipping</Link>
+              </li>
+            </ul>
+          </div>
           <form
             className="card-body w-full max-w-80 md:max-w-96"
             onSubmit={handleSubmit}

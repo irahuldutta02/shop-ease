@@ -10,12 +10,15 @@ import App from "./App.jsx";
 import "./index.css";
 import { CartScreen } from "./screens/CartScreen.jsx";
 import { ErrorScreen } from "./screens/ErrorScreen.jsx";
-import { ResetPass } from "./screens/ResetPass.jsx";
 import { HomeScreen } from "./screens/HomeScreen.jsx";
 import { LoginScreen } from "./screens/LoginScreen.jsx";
+import { PaymentScreen } from "./screens/PaymentScreen.jsx";
 import { ProductScreen } from "./screens/ProductScreen.jsx";
+import { ResetPass } from "./screens/ResetPass.jsx";
+import { ShippingScreen } from "./screens/ShippingScreen.jsx";
 import { SignupScreen } from "./screens/SignupScreen.jsx";
 import store from "./store.js";
+import { PrivateRoutes } from "./components/PrivateRoutes.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +29,10 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
       <Route path="/reset-password/:resetToken" element={<ResetPass />} />
+      <Route path="" element={<PrivateRoutes />}>
+        <Route path="/shipping" element={<ShippingScreen />} />
+        <Route path="/payment" element={<PaymentScreen />} />
+      </Route>
       <Route path="*" element={<ErrorScreen />} />
     </Route>
   )

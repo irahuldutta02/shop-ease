@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../constants";
 import {
-  useLoginMutation,
   useForgotPasswordMutation,
+  useLoginMutation,
 } from "../slices/userApiSlice";
 import { setCredentials } from "../slices/userSlice";
-import { BACKEND_URL } from "../constants";
 
 export const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -16,6 +16,17 @@ export const LoginScreen = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { userInfo } = useSelector((state) => state.user);
+
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const redirect = sp.get("redirect") || "/";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
 
   const [login, { isLoading }] = useLoginMutation();
   const [forgotPassword, { isLoading: isLoadingPassword }] =

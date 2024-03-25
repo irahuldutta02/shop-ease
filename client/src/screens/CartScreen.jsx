@@ -43,7 +43,9 @@ export const CartScreen = () => {
     }
   };
 
-  const checkoutHandler = () => {};
+  const checkoutHandler = () => {
+    navigate("/login?redirect=/shipping");
+  };
 
   return (
     <>

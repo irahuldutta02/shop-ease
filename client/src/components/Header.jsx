@@ -35,7 +35,7 @@ export const Header = () => {
       const res = await logoutApi().unwrap();
       toast.success(res.message);
       dispatch(logout());
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       toast.error(
         error?.data?.message ||

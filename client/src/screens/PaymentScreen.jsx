@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { savePaymentMethod } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const PaymentScreen = () => {
   const cart = useSelector((state) => state.cart);
-  const { paymentMethod } = cart;
+  const { paymentMethod, cartItems } = cart;
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [selectedMethod, setSelectedMethod] = useState(
     paymentMethod?.length > 0 ? paymentMethod : "stripe"
@@ -17,14 +17,36 @@ export const PaymentScreen = () => {
 
   const handleContinue = () => {
     dispatch(savePaymentMethod(selectedMethod));
-    // TODO - Implement payment gateway
+    navigate("/place-order");
   };
+
+  if (cartItems.length === 0) {
+    return (
+      <div className="flex justify-start items-center flex-col gap-4 w-full min-h-screen pt-20 pb-10">
+        <div className="flex justify-start items-center flex-col gap-4 w-full max-w-6xl p-4">
+          <div className="flex justify-center items-center flex-col gap-4 w-full">
+            <div className="flex justify-center items-center flex-col gap-4 w-full">
+              <h1 className="text-xl font-bold">Your Cart is Empty</h1>
+              <div className="flex justify-center items-center flex-col gap-4 w-full">
+                <button
+                  onClick={() => navigate("/")}
+                  className="btn btn-sm btn-primary"
+                >
+                  Go Shopping
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="flex justify-start items-center flex-col gap-4 w-full min-h-screen pt-20 pb-10">
         <div className="flex justify-start items-center flex-col gap-4 w-full max-w-6xl p-4">
-          <div className="flex gap-8 justify-center items-center w-full max-w-89 md:max-w-96 flex-col p-4 bg-neutral shadow-xl rounded-lg ">
+          <div className="flex gap-8 justify-center items-center w-full max-w-80 md:max-w-96 flex-col p-4 bg-neutral shadow-xl rounded-lg ">
             <div className="flex text-3xl w-full justify-center items-center text-center">
               <h1>Payment Method</h1>
             </div>

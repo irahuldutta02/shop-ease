@@ -19,6 +19,7 @@ import { ShippingScreen } from "./screens/ShippingScreen.jsx";
 import { SignupScreen } from "./screens/SignupScreen.jsx";
 import store from "./store.js";
 import { PrivateRoutes } from "./components/PrivateRoutes.jsx";
+import { PlaceOrderScreen } from "./screens/PlaceOrderScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
       <Route path="" element={<PrivateRoutes />}>
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
+        <Route path="/place-order" element={<PlaceOrderScreen />} />
       </Route>
       <Route path="*" element={<ErrorScreen />} />
     </Route>

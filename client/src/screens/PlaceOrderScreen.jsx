@@ -159,7 +159,7 @@ export const PlaceOrderScreen = () => {
                           <s>$10</s> $0
                         </>
                       ) : (
-                        shippingPrice
+                        "$" + shippingPrice
                       )}
                     </span>
                   </p>

@@ -8,6 +8,7 @@ import {
   useForgotPasswordMutation,
 } from "../slices/userApiSlice";
 import { setCredentials } from "../slices/userSlice";
+import { BACKEND_URL } from "../constants";
 
 export const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -50,6 +51,19 @@ export const LoginScreen = () => {
     try {
       const res = await forgotPassword({ email }).unwrap();
       toast.success(res.message);
+    } catch (error) {
+      toast.error(
+        error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          "An error occurred"
+      );
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    try {
+      window.location.href = `${BACKEND_URL}/auth/google/callback`;
     } catch (error) {
       toast.error(
         error?.data?.message ||
@@ -119,6 +133,7 @@ export const LoginScreen = () => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    handleGoogleAuth();
                   }}
                   className="btn btn-sm flex-1 btn-accent"
                 >

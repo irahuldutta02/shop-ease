@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { useRegisterMutation } from "../slices/userApiSlice";
 import { setCredentials } from "../slices/userSlice";
+import { BACKEND_URL } from "../constants";
 
 export const SignupScreen = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,19 @@ export const SignupScreen = () => {
       dispatch(setCredentials({ ...res.data }));
       toast.success("Registration Successful");
       navigate("/");
+    } catch (error) {
+      toast.error(
+        error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          "An error occurred"
+      );
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    try {
+      window.location.href = `${BACKEND_URL}/auth/google/callback`;
     } catch (error) {
       toast.error(
         error?.data?.message ||
@@ -106,6 +120,7 @@ export const SignupScreen = () => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    handleGoogleAuth();
                   }}
                   className="btn btn-sm flex-1 btn-accent"
                 >

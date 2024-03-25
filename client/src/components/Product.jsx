@@ -1,7 +1,39 @@
+import { toast } from "react-hot-toast";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addToCart, removeFromCart } from "../slices/cartSlice";
 
 export const Product = ({ product }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
+
+  const findProductInCart = (id) => {
+    return cartItems.find((item) => item._id === id);
+  };
+
+  const addToCartHandler = (e) => {
+    e.stopPropagation();
+    dispatch(addToCart({ ...product, qty: Number(1) }));
+    toast.success(`${product.name} Added to cart`);
+  };
+
+  const removeFromCartHandler = (e) => {
+    e.stopPropagation();
+    dispatch(removeFromCart(product._id));
+    toast.success(`${product.name} Removed from cart`, {
+      icon: "ℹ️",
+    });
+  };
+
+  const buyNowHandler = (e) => {
+    e.stopPropagation();
+    dispatch(addToCart({ ...product, qty: Number(1) }));
+    navigate("/cart");
+  };
 
   return (
     <>
@@ -31,7 +63,34 @@ export const Product = ({ product }) => {
           </p>
           <div className="card-actions items-center justify-end">
             <div className="">${product.price}</div>
-            <button className="btn btn-sm btn-accent">Buy Now</button>
+            <button className="btn btn-sm btn-accent" onClick={buyNowHandler}>
+              Buy Now
+            </button>
+            {findProductInCart(product._id) ? (
+              <div
+                className="tooltip tooltip-bottom tooltip-info"
+                data-tip="Remove from cart"
+              >
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={removeFromCartHandler}
+                >
+                  <FaMinus />
+                </button>
+              </div>
+            ) : (
+              <div
+                className="tooltip tooltip-bottom tooltip-info"
+                data-tip="Add to cart"
+              >
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={addToCartHandler}
+                >
+                  <FaPlus />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

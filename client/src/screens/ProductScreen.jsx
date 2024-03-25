@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FaShareAlt } from "react-icons/fa";
+import { FaMinus, FaShareAlt } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoHomeOutline } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { addToCart, removeFromCart } from "../slices/cartSlice";
 import { useGetProductDetailsQuery } from "../slices/productApiSlice";
 import { ErrorScreen } from "./ErrorScreen";
 import { LoadingScreen } from "./LoadingScreen";
-import { addToCart } from "../slices/cartSlice";
 
 export const ProductScreen = () => {
   const { id } = useParams();
@@ -32,7 +32,26 @@ export const ProductScreen = () => {
     }
   }, [error]);
 
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
+
+  const findProductInCart = (id) => {
+    return cartItems.find((item) => item._id === id);
+  };
+
   const addToCartHandler = () => {
+    dispatch(addToCart({ ...product, qty: Number(quantity) }));
+    toast.success(`${product.name} Added to cart`);
+  };
+  const removeFromCartHandler = () => {
+    dispatch(removeFromCart(product._id));
+    toast.success(`${product.name} Removed from cart`, {
+      icon: "ℹ️",
+    });
+  };
+
+  const buyNowHandler = (e) => {
+    e.stopPropagation();
     dispatch(addToCart({ ...product, qty: Number(quantity) }));
     navigate("/cart");
   };
@@ -116,14 +135,36 @@ export const ProductScreen = () => {
                     max={product?.countInStock}
                     min={1}
                   />
-                  <button className="btn btn-sm btn-accent">Buy Now</button>
-                  {/* Add to cart */}
                   <button
-                    className="btn btn-sm btn-primary"
-                    onClick={addToCartHandler}
+                    className="btn btn-sm btn-accent"
+                    onClick={buyNowHandler}
                   >
-                    <FaPlus />
+                    Buy Now
                   </button>
+                  {/* Add to cart */}
+                  {findProductInCart(product._id) ? (
+                    <div
+                      className="tooltip tooltip-bottom tooltip-info"
+                      data-tip="Remove from cart"
+                    >
+                      <button
+                        className="btn btn-sm btn-primary"
+                        onClick={removeFromCartHandler}
+                      >
+                        <FaMinus />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className="tooltip tooltip-bottom tooltip-info"
+                      data-tip="Add to cart"
+                      onClick={addToCartHandler}
+                    >
+                      <button className="btn btn-sm btn-primary">
+                        <FaPlus />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

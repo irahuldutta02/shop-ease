@@ -27,6 +27,13 @@ const cartSlice = createSlice({
 
       return updateCart(state);
     },
+    changeQuantity: (state, action) => {
+      const { productId, quantity } = action.payload;
+      state.cartItems = state.cartItems.map((i) =>
+        i._id === productId ? { ...i, qty: quantity } : i
+      );
+      return updateCart(state);
+    },
     removeFromCart: (state, action) => {
       state.cartItems = state.cartItems.filter((i) => i._id !== action.payload);
       return updateCart(state);
@@ -56,6 +63,7 @@ export const {
   saveShippingAddress,
   savePaymentMethod,
   clearCart,
+  changeQuantity,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { removeFromCart } from "../slices/cartSlice";
+import { changeQuantity, removeFromCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { ConfirmModal } from "../components/ConfirmModal";
 import { CartConfirmModalContext } from "../context";
@@ -45,6 +45,10 @@ export const CartScreen = () => {
 
   const checkoutHandler = () => {
     navigate("/login?redirect=/shipping");
+  };
+
+  const handleQuantityChange = (productId, value) => {
+    dispatch(changeQuantity({ productId, quantity: Number(value) }));
   };
 
   return (
@@ -95,7 +99,19 @@ export const CartScreen = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-center items-center">
+                    <div className="flex justify-center items-center gap-2">
+                      {/* quantity */}
+                      <input
+                        value={product.qty}
+                        type="number"
+                        placeholder="Quantity"
+                        className="grow input input-sm input-bordered max-w-20"
+                        max={product?.countInStock}
+                        min={1}
+                        onChange={(e) => {
+                          handleQuantityChange(product._id, e.target.value);
+                        }}
+                      />
                       <button
                         onClick={() => {
                           handleDeleteItem(product._id);

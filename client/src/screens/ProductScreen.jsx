@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { FaMinus, FaShareAlt } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoHomeOutline } from "react-icons/io5";
@@ -54,6 +54,24 @@ export const ProductScreen = () => {
     e.stopPropagation();
     dispatch(addToCart({ ...product, qty: Number(quantity) }));
     navigate("/cart");
+  };
+
+  const handleQuantityChange = (value, countInStock) => {
+    if (value > countInStock) {
+      toast.dismiss();
+      toast.success(`Max stock reached.`, {
+        icon: "ℹ️",
+      });
+      setQuantity(countInStock);
+    } else if (value < 1) {
+      toast.dismiss();
+      toast.success(`Minimum 1 item have to be added.`, {
+        icon: "ℹ️",
+      });
+      setQuantity(1);
+    } else {
+      setQuantity(value);
+    }
   };
 
   return (
@@ -128,12 +146,17 @@ export const ProductScreen = () => {
                   {/* quantity */}
                   <input
                     value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
+                    onChange={(e) => {
+                      handleQuantityChange(
+                        e.target.value,
+                        product?.countInStock
+                      );
+                    }}
                     type="number"
                     placeholder="Quantity"
                     className="grow input input-sm input-bordered max-w-20"
-                    max={product?.countInStock}
                     min={1}
+                    max={product?.countInStock}
                   />
                   <button
                     className="btn btn-sm btn-accent"

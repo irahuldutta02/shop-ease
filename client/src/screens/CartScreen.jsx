@@ -5,6 +5,7 @@ import { changeQuantity, removeFromCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { ConfirmModal } from "../components/ConfirmModal";
 import { CartConfirmModalContext } from "../context";
+import { toast } from "react-hot-toast";
 
 export const CartScreen = () => {
   const navigate = useNavigate();
@@ -47,8 +48,22 @@ export const CartScreen = () => {
     navigate("/login?redirect=/shipping");
   };
 
-  const handleQuantityChange = (productId, value) => {
-    dispatch(changeQuantity({ productId, quantity: Number(value) }));
+  const handleQuantityChange = (productId, value, countInStock) => {
+    if (value > countInStock) {
+      toast.dismiss();
+      toast.success(`Max stock reached.`, {
+        icon: "ℹ️",
+      });
+      dispatch(changeQuantity({ productId, quantity: Number(countInStock) }));
+    } else if (value < 1) {
+      toast.dismiss();
+      toast.success(`Minimum 1 item have to be added.`, {
+        icon: "ℹ️",
+      });
+      dispatch(changeQuantity({ productId, quantity: 1 }));
+    } else {
+      dispatch(changeQuantity({ productId, quantity: Number(value) }));
+    }
   };
 
   return (
@@ -106,11 +121,15 @@ export const CartScreen = () => {
                         type="number"
                         placeholder="Quantity"
                         className="grow input input-sm input-bordered max-w-20"
-                        max={product?.countInStock}
-                        min={1}
                         onChange={(e) => {
-                          handleQuantityChange(product._id, e.target.value);
+                          handleQuantityChange(
+                            product._id,
+                            e.target.value,
+                            product.countInStock
+                          );
                         }}
+                        min={1}
+                        max={product.countInStock}
                       />
                       <button
                         onClick={() => {

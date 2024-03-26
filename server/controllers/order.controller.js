@@ -59,4 +59,40 @@ const addOrderItems = asyncHandler(async (req, res) => {
   }
 });
 
-export { addOrderItems };
+const getOrderById = asyncHandler(async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "name email"
+    );
+
+    if (order) {
+      res.json({
+        status: 200,
+        message: "Order found",
+        data: order,
+      });
+    } else {
+      res.status(404);
+      throw new Error("Order not found");
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+const getUserOrders = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id }).populate(
+      "user",
+      "name email"
+    );
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(400);
+    throw new Error("Error Fetching Orders");
+  }
+});
+
+export { addOrderItems, getOrderById, getUserOrders };

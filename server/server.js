@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth.routes.js";
 import orderRoutes from "./routes/oder.routes.js";
 
 import passport from "./utils/passport.js";
+import stripeUtil from "./utils/stripe.js";
 
 const app = express();
 connectDB();
@@ -35,6 +36,7 @@ app.use(
 
 app.use(cookieParser());
 passport(app);
+stripeUtil(app);
 
 app.get("/", (req, res) => {
   return res.status(200).send({ status: 200, message: "Server is up!" });

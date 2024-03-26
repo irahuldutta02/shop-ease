@@ -63,16 +63,30 @@ export const Product = ({ product }) => {
           </p>
           <div className="card-actions items-center justify-end">
             <div className="">${product.price}</div>
-            <button className="btn btn-sm btn-accent" onClick={buyNowHandler}>
-              Buy Now
-            </button>
+            {/* buy now or go to cart */}
+            {findProductInCart(product._id) ? (
+              <button
+                className="btn btn-sm btn-primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/cart");
+                }}
+              >
+                Go to Cart
+              </button>
+            ) : (
+              <button className="btn btn-sm btn-accent" onClick={buyNowHandler}>
+                Buy Now
+              </button>
+            )}
+            {/* add to cart or remove from cart */}
             {findProductInCart(product._id) ? (
               <div
                 className="tooltip tooltip-bottom tooltip-info"
                 data-tip="Remove from cart"
               >
                 <button
-                  className="btn btn-sm btn-primary"
+                  className="btn btn-sm btn-accent"
                   onClick={removeFromCartHandler}
                 >
                   <FaMinus />

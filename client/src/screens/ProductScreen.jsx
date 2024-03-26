@@ -158,20 +158,32 @@ export const ProductScreen = () => {
                     min={1}
                     max={product?.countInStock}
                   />
-                  <button
-                    className="btn btn-sm btn-accent"
-                    onClick={buyNowHandler}
-                  >
-                    Buy Now
-                  </button>
-                  {/* Add to cart */}
+                  {/* buy now or go to cart */}
+                  {findProductInCart(product._id) ? (
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={() => {
+                        navigate("/cart");
+                      }}
+                    >
+                      Go to Cart
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-sm btn-accent"
+                      onClick={buyNowHandler}
+                    >
+                      Buy Now
+                    </button>
+                  )}
+                  {/* Add to cart or remove from cart */}
                   {findProductInCart(product._id) ? (
                     <div
                       className="tooltip tooltip-bottom tooltip-info"
                       data-tip="Remove from cart"
                     >
                       <button
-                        className="btn btn-sm btn-primary"
+                        className="btn btn-sm btn-accent"
                         onClick={removeFromCartHandler}
                       >
                         <FaMinus />

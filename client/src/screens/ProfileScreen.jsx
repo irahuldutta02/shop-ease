@@ -183,6 +183,7 @@ export const ProfileScreen = () => {
                         handleUpdate();
                       }}
                       className="btn btn-sm btn-accent"
+                      disabled={isUpdating}
                     >
                       {isUpdating ? (
                         <span className="loading loading-dots loading-sm"></span>
@@ -196,6 +197,7 @@ export const ProfileScreen = () => {
                       onClick={() => {
                         setIsEditing(false);
                       }}
+                      disabled={isUpdating}
                       className="btn btn-sm btn-secondary"
                     >
                       {isUpdating ? (

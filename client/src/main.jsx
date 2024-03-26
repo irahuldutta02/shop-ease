@@ -13,6 +13,7 @@ import { CartScreen } from "./screens/CartScreen.jsx";
 import { ErrorScreen } from "./screens/ErrorScreen.jsx";
 import { HomeScreen } from "./screens/HomeScreen.jsx";
 import { LoginScreen } from "./screens/LoginScreen.jsx";
+import { OrderScreen } from "./screens/OrderScreen.jsx";
 import { PaymentScreen } from "./screens/PaymentScreen.jsx";
 import { PlaceOrderScreen } from "./screens/PlaceOrderScreen.jsx";
 import { ProductScreen } from "./screens/ProductScreen.jsx";
@@ -20,6 +21,7 @@ import { ResetPass } from "./screens/ResetPass.jsx";
 import { ShippingScreen } from "./screens/ShippingScreen.jsx";
 import { SignupScreen } from "./screens/SignupScreen.jsx";
 import store from "./store.js";
+import { ProfileScreen } from "./screens/ProfileScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +36,8 @@ const router = createBrowserRouter(
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
         <Route path="/place-order" element={<PlaceOrderScreen />} />
+        <Route path="/order/:id" element={<OrderScreen />} />
+        <Route path="/profile" element={<ProfileScreen />} />
       </Route>
       <Route path="*" element={<ErrorScreen />} />
     </Route>

@@ -6,6 +6,7 @@ export const ErrorScreen = ({
   error = "Page Not Found",
   errorMessage = "The page you are looking for does not exist.",
   status = 404,
+  onRetry = null,
 }) => {
   const navigate = useNavigate();
 
@@ -30,6 +31,11 @@ export const ErrorScreen = ({
               >
                 Home
               </button>
+              {onRetry && (
+                <button onClick={onRetry} className="btn btn-sm btn-accent">
+                  Retry
+                </button>
+              )}
             </div>
           </div>
         </div>

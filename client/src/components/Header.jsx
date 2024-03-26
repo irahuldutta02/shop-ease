@@ -59,16 +59,28 @@ export const Header = () => {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-48 flex justify-center items-center gap-2"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box  flex justify-center items-center gap-2"
           >
             {userInfo && (
               <li className="w-full">
-                <div className="btn btn-sm w-full">
-                  {userInfo?.name.length > 14
-                    ? userInfo?.name.slice(0, 14) + "..."
-                    : userInfo?.name}
+                <div
+                  className="bg-neutral w-full flex flex-col justify-center items-center p-2"
+                  onClick={() => {
+                    navigate("/profile");
+                  }}
+                >
+                  <div>
+                    {userInfo?.name.length > 30
+                      ? userInfo?.name.slice(0, 30) + "..."
+                      : userInfo?.name}
+                  </div>
+                  <div>
+                    {userInfo?.email.length > 30
+                      ? userInfo?.email.slice(0, 30) + "..."
+                      : userInfo?.email}
+                  </div>
                   {userInfo?.isAdmin && (
-                    <div className="badge badge-primary">A</div>
+                    <div className="badge badge-primary">Admin</div>
                   )}
                 </div>
               </li>

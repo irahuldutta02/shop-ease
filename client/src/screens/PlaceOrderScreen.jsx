@@ -1,13 +1,13 @@
 import { toast } from "react-hot-toast";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoShoppingComponents } from "../components/GoShoppingComponents";
 import { clearCart } from "../slices/cartSlice";
 import { useCreateOrderMutation } from "../slices/orderApiSlice";
 
 export const PlaceOrderScreen = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
@@ -41,7 +41,7 @@ export const PlaceOrderScreen = () => {
       if (response.status === 201) {
         toast.success("Order saved successfully");
         dispatch(clearCart());
-        // navigate(`/order/${response.data._id}`);
+        navigate(`/order/${response.data._id}`);
       }
     } catch (error) {
       console.error("Failed to place order:", error);

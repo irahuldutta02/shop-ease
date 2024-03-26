@@ -1,5 +1,8 @@
 import { useParams } from "react-router-dom";
-import { useGetOrderDetailsQuery } from "../slices/orderApiSlice";
+import {
+  useGetOrderDetailsQuery,
+  usePayWithStripeMutation,
+} from "../slices/orderApiSlice";
 import { LoadingScreen } from "./LoadingScreen";
 import { ErrorScreen } from "./ErrorScreen";
 import { useSelector } from "react-redux";
@@ -11,6 +14,9 @@ export const OrderScreen = () => {
 
   const { data, isLoading, isError, refetch } =
     useGetOrderDetailsQuery(orderId);
+
+  const [payWithStripe, { isLoading: loadingStripe }] =
+    usePayWithStripeMutation();
 
   const order = data?.data;
 
@@ -41,6 +47,18 @@ export const OrderScreen = () => {
       />
     );
   }
+
+  const handleStripePayment = async (orderItems) => {
+    try {
+      const res = await payWithStripe({
+        orderId,
+        orderItems,
+      }).unwrap();
+      window.location.href = res.url;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (!isLoading && !isError) {
     return (
@@ -184,22 +202,27 @@ export const OrderScreen = () => {
                       <span className="text-white">${totalPrice}</span>
                     </p>
                   </div>
-                  <div
-                    className="flex justify-center items-center gap-4 w-full"
-                    // onClick={handlePlaceOrder}
-                  >
+                  <div className="flex justify-center items-center gap-4 w-full">
                     <button
-                      disabled={isLoading}
+                      disabled={loadingStripe}
                       className="btn btn-sm btn-primary"
+                      onClick={() => {
+                        handleStripePayment(orderItems);
+                      }}
                     >
-                      <span>Pay with</span>
-                      <span className="capitalize">{paymentMethod}</span>
+                      {loadingStripe ? (
+                        <>
+                          <span className="loading loading-dots loading-sm"></span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Pay with</span>
+                          <span className="capitalize">{paymentMethod}</span>
+                        </>
+                      )}
                     </button>
                     {userInfo?.isAdmin && !order?.isDelivered && (
-                      <button
-                        disabled={isLoading}
-                        className="btn btn-sm btn-accent"
-                      >
+                      <button className="btn btn-sm btn-accent">
                         Mark As Delivered
                       </button>
                     )}

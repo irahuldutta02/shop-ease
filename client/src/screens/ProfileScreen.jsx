@@ -79,6 +79,11 @@ export const ProfileScreen = () => {
             </div>
             <div className="flex gap-4 justify-center items-center w-full max-w-80 md:max-w-96 flex-col py-4 px-8 bg-neutral shadow-xl rounded-lg ">
               <div className="w-full flex justify-center items-start flex-col gap-2 ">
+                {userInfo?.isAdmin && (
+                  <div className="w-full flex justify-center items-center">
+                    <div className="badge badge-primary">Admin Profile</div>
+                  </div>
+                )}
                 <div className="w-full">
                   {!isEditing && (
                     <>

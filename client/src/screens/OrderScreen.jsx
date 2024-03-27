@@ -1,11 +1,15 @@
 import { useParams } from "react-router-dom";
 import {
+  useDeliverOrderMutation,
   useGetOrderDetailsQuery,
   usePayWithStripeMutation,
 } from "../slices/orderApiSlice";
 import { LoadingScreen } from "./LoadingScreen";
 import { ErrorScreen } from "./ErrorScreen";
 import { useSelector } from "react-redux";
+import { formateDateTime } from "../utils/formateDate";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 export const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -17,6 +21,9 @@ export const OrderScreen = () => {
 
   const [payWithStripe, { isLoading: loadingStripe }] =
     usePayWithStripeMutation();
+
+  const [deliverOrder, { isLoading: updateOrderLoading }] =
+    useDeliverOrderMutation();
 
   const order = data?.data;
 
@@ -33,6 +40,10 @@ export const OrderScreen = () => {
   const totalItem = orderItems?.length;
   const totalQuantity = orderItems?.reduce((acc, item) => acc + item.qty, 0);
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -43,7 +54,6 @@ export const OrderScreen = () => {
         error={"Page not found"}
         errorMessage="Failed to fetch order details"
         status={404}
-        onRetry={refetch}
       />
     );
   }
@@ -57,6 +67,17 @@ export const OrderScreen = () => {
       window.location.href = res.url;
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleMarkAsDelivered = (orderId) => async () => {
+    try {
+      const res = await deliverOrder(orderId).unwrap();
+      await refetch();
+      console.log(res);
+      toast.success("Order Marked as Delivered Successfully");
+    } catch (error) {
+      toast.error("Error Marking order as delivered");
     }
   };
 
@@ -76,7 +97,7 @@ export const OrderScreen = () => {
                   <div className="w-full flex justify-center items-start flex-col gap-1 ">
                     <p>
                       <span className="font-bold">Number : </span>
-                      <span className="text-white">{orderId}</span>
+                      <span className="text-secondary-content">{orderId}</span>
                     </p>
                     <p>
                       <span className="font-bold">Status : </span>
@@ -88,6 +109,14 @@ export const OrderScreen = () => {
                         {isDelivered ? "Delivered" : "Not Delivered Yet"}
                       </span>
                     </p>
+                    {isDelivered && (
+                      <p>
+                        <span className="font-bold">Delivered At : </span>
+                        <span className="text-green-500">
+                          {formateDateTime(order?.deliveredAt)}
+                        </span>
+                      </p>
+                    )}
                   </div>
                 </div>
                 {/* Shipping Details */}
@@ -98,39 +127,45 @@ export const OrderScreen = () => {
                   <div className="w-full flex justify-center items-start flex-col gap-1 ">
                     <p>
                       <span className="font-bold">Name : </span>
-                      <span className="text-white">{user?.name}</span>
+                      <span className="text-secondary-content">
+                        {user?.name}
+                      </span>
                     </p>
                     <p>
                       <span className="font-bold">Email : </span>
-                      <span className="text-white">{user?.email}</span>
+                      <span className="text-secondary-content">
+                        {user?.email}
+                      </span>
                     </p>
                     <p>
                       <span className="font-bold">Address : </span>
-                      <span className="text-white">
+                      <span className="text-secondary-content">
                         {shippingAddress?.address}
                       </span>
                     </p>
                     <p>
                       <span className="font-bold">City : </span>
-                      <span className="text-white">
+                      <span className="text-secondary-content">
                         {shippingAddress?.city}
                       </span>
                     </p>
                     <p>
                       <span className="font-bold">Postal Code : </span>
-                      <span className="text-white">
+                      <span className="text-secondary-content">
                         {shippingAddress?.postalCode}
                       </span>
                     </p>
                     <p>
                       <span className="font-bold">Country : </span>
-                      <span className="text-white">
+                      <span className="text-secondary-content">
                         {shippingAddress?.country}
                       </span>
                     </p>
                     <p>
                       <span className="font-bold">Payment Method : </span>
-                      <span className="text-white">{paymentMethod}</span>
+                      <span className="text-secondary-content">
+                        {paymentMethod}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -171,19 +206,25 @@ export const OrderScreen = () => {
                   <div className="flex justify-center items-start flex-col w-full gap-1">
                     <p>
                       <span className="font-bold">Product : </span>
-                      <span className="text-white">{totalItem}</span>
+                      <span className="text-secondary-content">
+                        {totalItem}
+                      </span>
                     </p>
                     <p>
                       <span className="font-bold">Quantity : </span>
-                      <span className="text-white">{totalQuantity}</span>
+                      <span className="text-secondary-content">
+                        {totalQuantity}
+                      </span>
                     </p>
                     <p>
                       <span className="font-bold">Total : </span>
-                      <span className="text-white">${itemsPrice}</span>
+                      <span className="text-secondary-content">
+                        ${itemsPrice}
+                      </span>
                     </p>
                     <p>
                       <span className="font-bold">Shipping : </span>
-                      <span className="text-white">
+                      <span className="text-secondary-content">
                         {shippingPrice === 0 ? (
                           <>
                             <s>$10</s> $0
@@ -195,35 +236,49 @@ export const OrderScreen = () => {
                     </p>
                     <p>
                       <span className="font-bold">Tax : </span>
-                      <span className="text-white">${taxPrice}</span>
+                      <span className="text-secondary-content">
+                        ${taxPrice}
+                      </span>
                     </p>
                     <p>
                       <span className="font-bold">Subtotal : </span>
-                      <span className="text-white">${totalPrice}</span>
+                      <span className="text-secondary-content">
+                        ${totalPrice}
+                      </span>
                     </p>
                   </div>
                   <div className="flex justify-center items-center gap-4 w-full">
-                    <button
-                      disabled={loadingStripe}
-                      className="btn btn-sm btn-primary"
-                      onClick={() => {
-                        handleStripePayment(orderItems);
-                      }}
-                    >
-                      {loadingStripe ? (
-                        <>
-                          <span className="loading loading-dots loading-sm"></span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Pay with</span>
-                          <span className="capitalize">{paymentMethod}</span>
-                        </>
-                      )}
-                    </button>
+                    {userInfo?._id === user._id && (
+                      <button
+                        disabled={loadingStripe}
+                        className="btn btn-sm btn-primary"
+                        onClick={() => {
+                          handleStripePayment(orderItems);
+                        }}
+                      >
+                        {loadingStripe ? (
+                          <>
+                            <span className="loading loading-dots loading-sm"></span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Pay with</span>
+                            <span className="capitalize">{paymentMethod}</span>
+                          </>
+                        )}
+                      </button>
+                    )}
                     {userInfo?.isAdmin && !order?.isDelivered && (
-                      <button className="btn btn-sm btn-accent">
-                        Mark As Delivered
+                      <button
+                        className="btn btn-sm btn-accent"
+                        disabled={order?.isDelivered || updateOrderLoading}
+                        onClick={handleMarkAsDelivered(orderId)}
+                      >
+                        {updateOrderLoading ? (
+                          <span className="loading loading-dots loading-sm"></span>
+                        ) : (
+                          "Mark As Delivered"
+                        )}
                       </button>
                     )}
                   </div>

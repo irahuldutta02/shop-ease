@@ -122,23 +122,25 @@ export const PlaceOrderScreen = () => {
                 <div className="w-full flex justify-center items-start flex-col gap-1 ">
                   <p>
                     <span className="font-bold">Address : </span>
-                    <span className="text-white">{address}</span>
+                    <span className="text-secondary-content">{address}</span>
                   </p>
                   <p>
                     <span className="font-bold">City : </span>
-                    <span className="text-white">{city}</span>
+                    <span className="text-secondary-content">{city}</span>
                   </p>
                   <p>
                     <span className="font-bold">Postal Code : </span>
-                    <span className="text-white">{postalCode}</span>
+                    <span className="text-secondary-content">{postalCode}</span>
                   </p>
                   <p>
                     <span className="font-bold">Country : </span>
-                    <span className="text-white">{country}</span>
+                    <span className="text-secondary-content">{country}</span>
                   </p>
                   <p>
                     <span className="font-bold">Payment Method : </span>
-                    <span className="text-white">{paymentMethod}</span>
+                    <span className="text-secondary-content">
+                      {paymentMethod}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -149,19 +151,23 @@ export const PlaceOrderScreen = () => {
                 <div className="flex justify-center items-start flex-col w-full gap-1">
                   <p>
                     <span className="font-bold">Product : </span>
-                    <span className="text-white">{totalItem}</span>
+                    <span className="text-secondary-content">{totalItem}</span>
                   </p>
                   <p>
                     <span className="font-bold">Quantity : </span>
-                    <span className="text-white">{totalQuantity}</span>
+                    <span className="text-secondary-content">
+                      {totalQuantity}
+                    </span>
                   </p>
                   <p>
                     <span className="font-bold">Total : </span>
-                    <span className="text-white">${itemsPrice}</span>
+                    <span className="text-secondary-content">
+                      ${itemsPrice}
+                    </span>
                   </p>
                   <p>
                     <span className="font-bold">Shipping : </span>
-                    <span className="text-white">
+                    <span className="text-secondary-content">
                       {shippingPrice === 0 ? (
                         <>
                           <s>$10</s> $0
@@ -173,11 +179,13 @@ export const PlaceOrderScreen = () => {
                   </p>
                   <p>
                     <span className="font-bold">Tax : </span>
-                    <span className="text-white">${taxPrice}</span>
+                    <span className="text-secondary-content">${taxPrice}</span>
                   </p>
                   <p>
                     <span className="font-bold">Subtotal : </span>
-                    <span className="text-white">${totalPrice}</span>
+                    <span className="text-secondary-content">
+                      ${totalPrice}
+                    </span>
                   </p>
                 </div>
                 <div

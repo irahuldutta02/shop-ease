@@ -61,6 +61,7 @@ export const Header = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box  flex justify-center items-center gap-2"
           >
+            {/* profile info and go to profile */}
             {userInfo && (
               <li className="w-full">
                 <div
@@ -85,6 +86,7 @@ export const Header = () => {
                 </div>
               </li>
             )}
+            {/* login signup */}
             {!userInfo && (
               <>
                 <li
@@ -105,6 +107,46 @@ export const Header = () => {
                 </li>
               </>
             )}
+            {/* Admin/users */}
+            {userInfo && userInfo?.isAdmin && (
+              <li className="w-full flex justify-center items-center">
+                <a
+                  onClick={() => {
+                    navigate("/admin/users");
+                  }}
+                  className="w-full flex justify-center"
+                >
+                  Users
+                </a>
+              </li>
+            )}
+            {/* admin/products */}
+            {userInfo && userInfo?.isAdmin && (
+              <li className="w-full flex justify-center items-center">
+                <a
+                  onClick={() => {
+                    navigate("/admin/products");
+                  }}
+                  className="w-full flex justify-center"
+                >
+                  Products
+                </a>
+              </li>
+            )}
+            {/* Admin/orders */}
+            {userInfo && userInfo?.isAdmin && (
+              <li className="w-full flex justify-center items-center">
+                <a
+                  onClick={() => {
+                    navigate("/admin/orders");
+                  }}
+                  className="w-full flex justify-center"
+                >
+                  Orders
+                </a>
+              </li>
+            )}
+            {/* logout */}
             {userInfo && (
               <li className="w-full flex justify-center items-center">
                 <a

@@ -7,6 +7,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import App from "./App.jsx";
+import { AdminRoutes } from "./components/AdminRoutes.jsx";
 import { PrivateRoutes } from "./components/PrivateRoutes.jsx";
 import "./index.css";
 import { CartScreen } from "./screens/CartScreen.jsx";
@@ -17,11 +18,14 @@ import { OrderScreen } from "./screens/OrderScreen.jsx";
 import { PaymentScreen } from "./screens/PaymentScreen.jsx";
 import { PlaceOrderScreen } from "./screens/PlaceOrderScreen.jsx";
 import { ProductScreen } from "./screens/ProductScreen.jsx";
+import { ProfileScreen } from "./screens/ProfileScreen.jsx";
 import { ResetPass } from "./screens/ResetPass.jsx";
 import { ShippingScreen } from "./screens/ShippingScreen.jsx";
 import { SignupScreen } from "./screens/SignupScreen.jsx";
+import { OrderListScreen } from "./screens/admin/OrderListScreen.jsx";
+import { ProductListScreen } from "./screens/admin/ProductListScreen.jsx";
+import { UserEditScreen } from "./screens/admin/UserEditScreen.jsx";
 import store from "./store.js";
-import { ProfileScreen } from "./screens/ProfileScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,12 +36,19 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
       <Route path="/reset-password/:resetToken" element={<ResetPass />} />
-      <Route path="" element={<PrivateRoutes />}>
+      {/* private routes */}
+      <Route path="/" element={<PrivateRoutes />}>
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
         <Route path="/place-order" element={<PlaceOrderScreen />} />
         <Route path="/order/:id" element={<OrderScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
+      </Route>
+      {/* admin routes */}
+      <Route path="/" element={<AdminRoutes />}>
+        <Route path="/admin/users" element={<UserEditScreen />} />
+        <Route path="/admin/products" element={<ProductListScreen />} />
+        <Route path="/admin/orders" element={<OrderListScreen />} />
       </Route>
       <Route path="*" element={<ErrorScreen />} />
     </Route>

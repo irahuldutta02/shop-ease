@@ -25,7 +25,6 @@ const stripeUtil = (app) => {
       });
       res.json({ url: session.url });
     } catch (err) {
-      console.log(err);
       res.status(500);
       throw new Error(err.message);
     }

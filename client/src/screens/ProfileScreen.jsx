@@ -64,6 +64,11 @@ export const ProfileScreen = () => {
           "An error occurred"
       );
     } finally {
+      setUpdatedUser({
+        ...updatedUser,
+        password: "",
+        confirmPassword: "",
+      });
       setIsEditing(false);
     }
   };
@@ -200,6 +205,12 @@ export const ProfileScreen = () => {
                   {isEditing && (
                     <button
                       onClick={() => {
+                        setUpdatedUser({
+                          name: userInfo?.name,
+                          email: userInfo?.email,
+                          password: "",
+                          confirmPassword: "",
+                        });
                         setIsEditing(false);
                       }}
                       disabled={isUpdating}

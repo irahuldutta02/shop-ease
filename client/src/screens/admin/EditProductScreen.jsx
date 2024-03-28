@@ -162,7 +162,7 @@ export const EditProductScreen = () => {
                     value={newProduct.description}
                     onChange={handleChange}
                     placeholder="description"
-                    className="textarea textarea-bordered w-full max-w-xs"
+                    className="textarea textarea-bordered w-full min-h-32 max-w-xs"
                   ></textarea>
                 </label>
                 {/* price */}

@@ -1,5 +1,5 @@
-import { Fragment, useEffect } from "react";
-import { FaEdit, FaExternalLinkAlt, FaRegCopy } from "react-icons/fa";
+import { Fragment, useEffect, useState } from "react";
+import { FaEdit, FaExternalLinkAlt, FaRegCopy, FaSearch } from "react-icons/fa";
 import {
   useDeleteProductMutation,
   useGetProductsQuery,
@@ -11,8 +11,26 @@ import toast from "react-hot-toast";
 export const ProductListScreen = () => {
   const navigate = useNavigate();
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { data, error, isLoading, refetch } = useGetProductsQuery();
-  const products = data?.data;
+  // const products = data?.data;
+
+  // modified products
+  let products = [];
+  if (data) {
+    // search by product name
+    const filteredOrders = data?.data?.filter((product) => {
+      return (
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+
+    products = filteredOrders;
+  }
 
   const [deleteProduct, { isLoading: deleteLoading }] =
     useDeleteProductMutation();
@@ -45,6 +63,21 @@ export const ProductListScreen = () => {
           </div>
           <div className="w-full flex justify-start items-center text-center flex-col gap-4">
             <div className="w-full flex justify-center items-end flex-col gap-4">
+              {/* search */}
+              <div className="w-full max-w-60 flex justify-end items-center">
+                <label className="input input-bordered w-full max-w-60 input-sm flex items-center gap-2 ">
+                  <input
+                    type="text"
+                    className="grow"
+                    placeholder="search by name, id , brand or category"
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                    }}
+                  />
+                  <FaSearch />
+                </label>
+              </div>
               <div className="w-full max-w-60 flex justify-end items-center">
                 <button
                   onClick={() => {

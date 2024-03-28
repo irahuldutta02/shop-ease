@@ -9,8 +9,8 @@ export const products = [
     category: "Electronics",
     price: 89.99,
     countInStock: 3,
-    rating: 4.5,
-    numReviews: 55,
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "Smartphone X1",
@@ -35,8 +35,8 @@ export const products = [
     category: "Laptop",
     price: 1099.99,
     countInStock: 2,
-    rating: 4.0,
-    numReviews: 5,
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "Wireless Headphones",
@@ -48,8 +48,8 @@ export const products = [
     category: "Headphones",
     price: 149.99,
     countInStock: 25,
-    rating: 4.8,
-    numReviews: 12,
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "Smart TV 4K",
@@ -61,8 +61,8 @@ export const products = [
     category: "Television",
     price: 799.99,
     countInStock: 7,
-    rating: 4.6,
-    numReviews: 9,
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "Gaming Console",
@@ -74,8 +74,8 @@ export const products = [
     category: "Gaming",
     price: 399.99,
     countInStock: 4,
-    rating: 4.2,
-    numReviews: 6,
+    rating: 0,
+    numReviews: 0,
   },
 ];
 

@@ -25,12 +25,9 @@ router.get("/google", async (req, res, next) => {
         params: req.query,
       }
     );
-
-    console.log(response);
-
     res.send(response);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ status: 500, error: "Internal Server Error" });
   }
 });
@@ -91,7 +88,7 @@ router.get("login/failed", (req, res) => {
 router.get("logout", (req, res) => {
   req.logout((err) => {
     if (err) {
-      console.log(err);
+      console.error(err);
     }
     res.redirect(CLIENT_URL);
   });

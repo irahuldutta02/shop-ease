@@ -22,6 +22,8 @@ import { ProfileScreen } from "./screens/ProfileScreen.jsx";
 import { ResetPass } from "./screens/ResetPass.jsx";
 import { ShippingScreen } from "./screens/ShippingScreen.jsx";
 import { SignupScreen } from "./screens/SignupScreen.jsx";
+import { CreateProductScreen } from "./screens/admin/CreateProductScreen.jsx";
+import { EditProductScreen } from "./screens/admin/EditProductScreen.jsx";
 import { OrderListScreen } from "./screens/admin/OrderListScreen.jsx";
 import { ProductListScreen } from "./screens/admin/ProductListScreen.jsx";
 import { UserEditScreen } from "./screens/admin/UserEditScreen.jsx";
@@ -49,6 +51,8 @@ const router = createBrowserRouter(
         <Route path="/admin/users" element={<UserEditScreen />} />
         <Route path="/admin/products" element={<ProductListScreen />} />
         <Route path="/admin/orders" element={<OrderListScreen />} />
+        <Route path="/admin/create" element={<CreateProductScreen />} />
+        <Route path="/admin/edit/:id" element={<EditProductScreen />} />
       </Route>
       <Route path="*" element={<ErrorScreen />} />
     </Route>

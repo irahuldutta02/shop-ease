@@ -18,7 +18,7 @@ export const ProductScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useGetProductDetailsQuery(id);
+  const { data, isLoading, error, refetch } = useGetProductDetailsQuery(id);
   const product = data?.data;
 
   useEffect(() => {
@@ -73,6 +73,10 @@ export const ProductScreen = () => {
       setQuantity(value);
     }
   };
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <>

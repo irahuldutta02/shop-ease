@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      "/api": "https://shop-ease-h0at.onrender.com",
+      "/api": "http://localhost:5000",
     },
   },
 });

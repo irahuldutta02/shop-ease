@@ -35,6 +35,22 @@ export const productApiSlice = apiSlice.injectEndpoints({
         body: data.newProduct,
       }),
     }),
+    getReviews: builder.query({
+      query: (id) => ({
+        url: `${PRODUCTS_URL}/reviews/${id}`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    createReview: builder.mutation({
+      query: (data) => ({
+        url: `${PRODUCTS_URL}/reviews/create/${data.id}`,
+        method: "PATCH",
+        body: {
+          rating: data.rating,
+          comment: data.comment,
+        },
+      }),
+    }),
   }),
 });
 
@@ -44,4 +60,6 @@ export const {
   useCreateProductMutation,
   useDeleteProductMutation,
   useEditProductMutation,
+  useGetReviewsQuery,
+  useCreateReviewMutation,
 } = productApiSlice;

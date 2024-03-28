@@ -6,12 +6,21 @@ import { IoHomeOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
-import { useGetProductDetailsQuery } from "../slices/productApiSlice";
+import {
+  useCreateReviewMutation,
+  useGetProductDetailsQuery,
+  useGetReviewsQuery,
+} from "../slices/productApiSlice";
 import { ErrorScreen } from "./ErrorScreen";
 import { LoadingScreen } from "./LoadingScreen";
 
 export const ProductScreen = () => {
   const { id } = useParams();
+
+  const userInfo = useSelector((state) => state.user.userInfo);
+
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
 
   const [quantity, setQuantity] = useState(1);
 
@@ -20,6 +29,23 @@ export const ProductScreen = () => {
 
   const { data, isLoading, error, refetch } = useGetProductDetailsQuery(id);
   const product = data?.data;
+
+  const [review, setReview] = useState({
+    rating: 5,
+    comment: "",
+  });
+
+  const {
+    data: reviewsData,
+    isLoading: reviewsLoading,
+    error: reviewsError,
+    refetch: refetchReviews,
+  } = useGetReviewsQuery(id);
+
+  const reviews = reviewsData?.data;
+
+  const [createReview, { isLoading: creatingReview }] =
+    useCreateReviewMutation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,9 +58,6 @@ export const ProductScreen = () => {
     }
   }, [error]);
 
-  const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
-
   const findProductInCart = (id) => {
     return cartItems.find((item) => item._id === id);
   };
@@ -43,6 +66,7 @@ export const ProductScreen = () => {
     dispatch(addToCart({ ...product, qty: Number(quantity) }));
     toast.success(`${product.name} Added to cart`);
   };
+
   const removeFromCartHandler = () => {
     dispatch(removeFromCart(product._id));
     toast.success(`${product.name} Removed from cart`, {
@@ -74,9 +98,34 @@ export const ProductScreen = () => {
     }
   };
 
+  const handleCreateReview = async () => {
+    if (review.comment === "" || review.rating === 0) {
+      toast.dismiss();
+      toast.error("Write you review.");
+    } else {
+      try {
+        const res = await createReview({ id, ...review }).unwrap();
+        console.log(res);
+        refetchReviews();
+        setReview({ rating: 0, comment: "" });
+        toast.success("Review added successfully.");
+      } catch (error) {
+        toast.dismiss();
+        toast.error(
+          error?.message || error?.data?.message || "Failed to add review."
+        );
+      }
+    }
+  };
+
+  const alreadyReviewed = () => {
+    return reviews?.find((review) => review.user === userInfo._id);
+  };
+
   useEffect(() => {
     refetch();
-  }, [refetch]);
+    refetchReviews();
+  }, [refetch, refetchReviews]);
 
   return (
     <>
@@ -90,7 +139,7 @@ export const ProductScreen = () => {
         />
       ) : (
         <div className="min-h-screen w-full flex justify-center items-start pt-20 pb-20">
-          <div className="flex justify-center items-center w-full max-w-4xl p-4">
+          <div className="flex justify-center items-center w-full max-w-4xl p-4 flex-col gap-4">
             <div className="w-full bg-neutral rounded-lg shadow-xl p-8 flex justify-center items-center gap-4 flex-col">
               {/* breadcrumbs */}
               <div className="text-sm breadcrumbs flex justify-start w-full overflow-hidden">
@@ -205,6 +254,115 @@ export const ProductScreen = () => {
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+
+            <div className="w-full bg-neutral rounded-lg shadow-xl p-8 flex justify-center items-center gap-4 flex-col">
+              <div className="w-full flex justify-center items-center text-center ">
+                <h1 className="text-3xl">Reviews</h1>
+              </div>
+              {/* give review */}
+              <div className="w-full flex justify-center items-center gap-2 flex-col">
+                <textarea
+                  type="text"
+                  placeholder="Write a review..."
+                  className="textarea textarea-bordered w-full min-h-20"
+                  maxLength={"200"}
+                  disabled={alreadyReviewed()}
+                  value={review.comment}
+                  onChange={(e) => {
+                    setReview({ ...review, comment: e.target.value });
+                  }}
+                ></textarea>
+                <div className="flex w-full justify-end items-center gap-2 flex-col">
+                  <div className="flex w-full justify-end items-center gap-2">
+                    <select
+                      name="rating"
+                      className="input input-sm"
+                      value={review.rating}
+                      disabled={alreadyReviewed()}
+                      onChange={(e) => {
+                        setReview({ ...review, rating: e.target.value });
+                      }}
+                    >
+                      <option value="1">⭐</option>
+                      <option value="2">⭐⭐</option>
+                      <option value="3">⭐⭐⭐</option>
+                      <option value="4">⭐⭐⭐⭐</option>
+                      <option value="5">⭐⭐⭐⭐⭐</option>
+                    </select>
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={handleCreateReview}
+                      disabled={creatingReview || alreadyReviewed()}
+                    >
+                      {creatingReview ? (
+                        <span className="loading loading-dots loading-sm"></span>
+                      ) : (
+                        "Submit"
+                      )}
+                    </button>
+                  </div>
+                  <div className="flex w-full justify-end items-center gap-2">
+                    {alreadyReviewed() && (
+                      <div className="badge badge-success ">
+                        Already Reviewed
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* reviews */}
+              <div className="w-full flex justify-center items-start flex-col gap-4">
+                {!reviewsLoading &&
+                  !error &&
+                  reviews.map((review, index) => {
+                    console.log(review);
+                    console.log(userInfo._id);
+
+                    return (
+                      <div key={index} className="chat chat-start w-full">
+                        <div className="chat-image avatar">
+                          <div className="w-10 rounded-full">
+                            <img
+                              alt="Tailwind CSS chat bubble component"
+                              src={`https://api.nilskoepke.com/profile-image/?name=${review?.name}`}
+                            />
+                          </div>
+                        </div>
+                        <div className="chat-header">
+                          {review?.name}{" "}
+                          {review?.user === userInfo?._id && "(You)"}
+                        </div>
+                        <div className="chat-bubble chat-bubble-success">
+                          {review?.comment}
+                        </div>
+                        <div className="chat-footer opacity-50 flex justify-start gap-2">
+                          <span>
+                            {Array.from({ length: review?.rating }, (_, i) => (
+                              <span key={i}>⭐</span>
+                            ))}
+                          </span>{" "}
+                          <span>{review?.rating}/5</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                {reviewsLoading && (
+                  <div className="flex justify-center items-center w-full gap-4">
+                    <span className="loading loading-dots loading-sm"></span>
+                  </div>
+                )}
+                {!reviewsLoading && reviews.length === 0 && (
+                  <div className="flex justify-center items-center w-full gap-4">
+                    <h1>No reviews yet.</h1>
+                  </div>
+                )}
+                {!reviewsLoading && reviewsError && (
+                  <div className="flex justify-center items-center w-full gap-4">
+                    <h1>Failed to load reviews.</h1>
+                  </div>
+                )}
               </div>
             </div>
           </div>

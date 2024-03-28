@@ -22,12 +22,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 
 app.use((req, res, next) => {
+  // res.header("Access-Control-Allow-Origin", "https://localhost:3000");
   res.header("Access-Control-Allow-Origin", "https://localhost:3000");
   next();
 });
 
 app.use(
   cors({
+    // origin: ["http://127.0.0.1:3000", "http://localhost:3000"],
     origin: ["http://127.0.0.1:3000", "http://localhost:3000"],
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     credentials: true,

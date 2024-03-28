@@ -105,6 +105,7 @@ export const ProductScreen = () => {
     } else {
       try {
         await createReview({ id, ...review }).unwrap();
+        refetch();
         refetchReviews();
         setReview({ rating: 0, comment: "" });
         toast.success("Review added successfully.");

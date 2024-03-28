@@ -60,7 +60,6 @@ export const CreateProductScreen = () => {
       toast.success("Product Created Successfully");
       navigate("/admin/products");
     } catch (error) {
-      console.log(error);
       toast.error("Failed to create product");
     }
   };

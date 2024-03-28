@@ -31,7 +31,6 @@ export const SignupScreen = () => {
 
     try {
       const res = await register({ email, password, name }).unwrap();
-      console.log(res);
       dispatch(setCredentials({ ...res.data }));
       toast.success("Registration Successful");
       navigate("/");

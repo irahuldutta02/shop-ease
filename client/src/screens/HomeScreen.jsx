@@ -28,7 +28,7 @@ export const HomeScreen = () => {
           dispatch(setCredentials({ ...res?.data?.data }));
         }
       } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
       }
     };
     getUser();

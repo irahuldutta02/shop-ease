@@ -74,8 +74,7 @@ export const EditProductScreen = () => {
   const handleSubmit = async () => {
     if (!validate()) return;
     try {
-      const res = await editProduct({ id, newProduct }).unwrap();
-      console.log(res);
+      await editProduct({ id, newProduct }).unwrap();
       toast.success("Product Updated Successfully");
       navigate("/admin/products");
     } catch (error) {

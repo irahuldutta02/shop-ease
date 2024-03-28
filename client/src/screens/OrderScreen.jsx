@@ -72,9 +72,8 @@ export const OrderScreen = () => {
 
   const handleMarkAsDelivered = (orderId) => async () => {
     try {
-      const res = await deliverOrder(orderId).unwrap();
+      await deliverOrder(orderId).unwrap();
       await refetch();
-      console.log(res);
       toast.success("Order Marked as Delivered Successfully");
     } catch (error) {
       toast.error("Error Marking order as delivered");

@@ -104,8 +104,7 @@ export const ProductScreen = () => {
       toast.error("Write you review.");
     } else {
       try {
-        const res = await createReview({ id, ...review }).unwrap();
-        console.log(res);
+        await createReview({ id, ...review }).unwrap();
         refetchReviews();
         setReview({ rating: 0, comment: "" });
         toast.success("Review added successfully.");
@@ -317,9 +316,6 @@ export const ProductScreen = () => {
                 {!reviewsLoading &&
                   !error &&
                   reviews.map((review, index) => {
-                    console.log(review);
-                    console.log(userInfo._id);
-
                     return (
                       <div key={index} className="chat chat-start w-full">
                         <div className="chat-image avatar">

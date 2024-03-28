@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { useContext, useState } from "react";
 import {
   IoClose,
   IoMenu,
@@ -15,10 +14,10 @@ import { ThemeContext } from "../context";
 import toast from "react-hot-toast";
 import { useLogoutMutation } from "../slices/userApiSlice";
 import { logout } from "../slices/userSlice";
+import { Search } from "./Search";
 
 export const Header = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [smScreen, setSmScreen] = useState(false);
 
   const { theme, setTheme } = useContext(ThemeContext);
 
@@ -167,37 +166,18 @@ export const Header = () => {
     );
   };
 
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 640px)");
-    if (media.matches) {
-      setSmScreen(true);
-    } else {
-      setSmScreen(false);
-    }
-    media.addEventListener("change", (e) => {
-      if (e.matches) {
-        setSmScreen(true);
-      } else {
-        setSmScreen(false);
-      }
-    });
-  }, []);
-
   return (
     <>
       <div className="flex justify-center items-center fixed w-full z-[10] bg-neutral">
         <div className="navbar bg-neutral  max-w-6xl">
-          {/* sm screen menu */}
-          {smScreen && (
-            <div className="flex-none">
-              <button
-                className="btn btn-square btn-ghost"
-                onClick={() => setOpenDrawer(!openDrawer)}
-              >
-                {!openDrawer ? <IoMenu size={25} /> : <IoClose size={25} />}
-              </button>
-            </div>
-          )}
+          <div className="flex-none md:hidden">
+            <button
+              className="btn btn-square btn-ghost"
+              onClick={() => setOpenDrawer(!openDrawer)}
+            >
+              {!openDrawer ? <IoMenu size={25} /> : <IoClose size={25} />}
+            </button>
+          </div>
 
           {/* logo */}
           <div className="flex-1">
@@ -211,18 +191,11 @@ export const Header = () => {
             />
           </div>
 
-          <div className="flex-none flex gap-4">
+          <div className="flex gap-2">
             {/* search bar */}
-            {!smScreen && (
-              <div className="flex justify-center items-center">
-                <label className="input input-bordered flex items-center gap-2">
-                  <input type="text" className="grow" placeholder="Search" />
-                  <button className="btn btn-sm">
-                    <FaSearch />
-                  </button>
-                </label>
-              </div>
-            )}
+            <div className="hidden md:block">
+              <Search />
+            </div>
 
             {/* cart */}
             <div className="dropdown dropdown-end">
@@ -294,14 +267,9 @@ export const Header = () => {
       </div>
 
       {/* sm screen search bar menu */}
-      {smScreen && openDrawer && (
-        <div className="bg-neutral rounded-lg fixed w-full flex justify-center items-center p-4 pt-20 z-[9]">
-          <label className="input input-bordered flex items-center gap-2">
-            <input type="text" className="grow" placeholder="Search" />
-            <button className="btn btn-sm">
-              <FaSearch />
-            </button>
-          </label>
+      {openDrawer && (
+        <div className="md:hidden bg-neutral rounded-lg fixed w-full flex justify-center items-center p-4 pt-20 z-[9]">
+          <Search />
         </div>
       )}
     </>

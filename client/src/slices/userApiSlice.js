@@ -44,7 +44,24 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    
+    getAllUser: builder.query({
+      query: () => ({
+        url: `${USERS_URL}`,
+        method: "GET",
+      }),
+    }),
+    makeAdmin: builder.mutation({
+      query: (id) => ({
+        url: `${USERS_URL}/make-admin/${id}`,
+        method: "PATCH",
+      }),
+    }),
+    removeAdmin: builder.mutation({
+      query: (id) => ({
+        url: `${USERS_URL}/remove-admin/${id}`,
+        method: "PATCH",
+      }),
+    }),
   }),
 });
 
@@ -55,4 +72,7 @@ export const {
   useResetPasswordMutation,
   useLogoutMutation,
   useUpdateUserProfileMutation,
+  useGetAllUserQuery,
+  useMakeAdminMutation,
+  useRemoveAdminMutation,
 } = userApiSlice;

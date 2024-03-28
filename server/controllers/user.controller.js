@@ -203,6 +203,83 @@ const resetPassword = asyncHandler(async (req, res) => {
   }
 });
 
+const getAllUsers = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find({});
+    if (users) {
+      res.status(200).json({
+        status: 200,
+        data: users,
+      });
+    } else {
+      res.status(404);
+      throw new Error("No users found");
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error("Internal Server Error");
+  }
+});
+
+const makeAdmin = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      if (user.isAdmin) {
+        res.status(400);
+        throw new Error("User is already an admin");
+      }
+
+      user.isAdmin = true;
+      await user.save();
+
+      res.status(200).json({
+        status: 200,
+        message: "User is now an admin",
+      });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error("Internal Server Error");
+  }
+});
+
+const removeAdmin = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      if (!user.isAdmin) {
+        res.status(400);
+        throw new Error("User is not an admin");
+      }
+
+      if (user._id.toString() === req.user._id.toString()) {
+        res.status(400);
+        throw new Error("You cannot remove yourself as an admin");
+      }
+
+      user.isAdmin = false;
+      await user.save();
+
+      res.status(200).json({
+        status: 200,
+        message: "User is no longer an admin",
+      });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error(error?.message || "Internal Server Error");
+  }
+});
+
 export {
   forgotPassword,
   logOutUser,
@@ -210,4 +287,7 @@ export {
   registerUser,
   updateUserProfile,
   resetPassword,
+  getAllUsers,
+  makeAdmin,
+  removeAdmin,
 };

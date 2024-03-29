@@ -32,8 +32,6 @@
     "react-router-dom": "^6.22.3",
     "shop-ease": "file:..",
     "tailwindcss": "^3.4.1",
-    "vite": "^5.2.6",
-    "@vite-pwa/assets-generator": "^0.2.4",
-    "vite-plugin-pwa": "^0.19.7"
+    "vite": "^5.2.6"
   }
 }

@@ -119,7 +119,11 @@ export const ProductScreen = () => {
   };
 
   const alreadyReviewed = () => {
-    return reviews?.find((review) => review.user === userInfo._id);
+    if (userInfo) {
+      return reviews?.some((review) => review.user === userInfo._id);
+    } else {
+      return false;
+    }
   };
 
   useEffect(() => {
@@ -268,7 +272,7 @@ export const ProductScreen = () => {
                   placeholder="Write a review..."
                   className="textarea textarea-bordered w-full min-h-20"
                   maxLength={"200"}
-                  disabled={alreadyReviewed()}
+                  disabled={alreadyReviewed() || !userInfo}
                   value={review.comment}
                   onChange={(e) => {
                     setReview({ ...review, comment: e.target.value });
@@ -280,7 +284,7 @@ export const ProductScreen = () => {
                       name="rating"
                       className="input input-sm"
                       value={review.rating}
-                      disabled={alreadyReviewed()}
+                      disabled={alreadyReviewed() || !userInfo}
                       onChange={(e) => {
                         setReview({ ...review, rating: e.target.value });
                       }}
@@ -294,7 +298,9 @@ export const ProductScreen = () => {
                     <button
                       className="btn btn-sm btn-primary"
                       onClick={handleCreateReview}
-                      disabled={creatingReview || alreadyReviewed()}
+                      disabled={
+                        creatingReview || alreadyReviewed() || !userInfo
+                      }
                     >
                       {creatingReview ? (
                         <span className="loading loading-dots loading-sm"></span>
@@ -309,6 +315,14 @@ export const ProductScreen = () => {
                         Already Reviewed
                       </div>
                     )}
+                    {!userInfo && (
+                      <div
+                        onClick={() => navigate("/login")}
+                        className="badge badge-error cursor-pointer"
+                      >
+                        Login to review
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -316,6 +330,7 @@ export const ProductScreen = () => {
               <div className="w-full flex justify-center items-start flex-col gap-4">
                 {!reviewsLoading &&
                   !error &&
+                  reviews.length > 0 &&
                   reviews.map((review, index) => {
                     return (
                       <div key={index} className="chat chat-start w-full">

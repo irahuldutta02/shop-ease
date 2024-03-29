@@ -54,7 +54,7 @@ if (NODE_ENV === "production") {
   });
 } else {
   app.get("/", (req, res) => {
-    res.send("API is running....");
+    return res.status(200).json({ status: 200, message: "Server is up" });
   });
 }
 

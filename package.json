@@ -4,12 +4,35 @@
   "description": "A e-commerce web app.",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\""
+    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
+    "client": "npm run dev --prefix client",
+    "server": "nodemon server/server.js",
+    "start": "node server/server.js",
+    "data:import": "node server/seeder.js",
+    "data:destroy": "node server/seeder.js -d",
+    "build": "npm install && npm install --prefix client && npm run build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.8",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.1",
+    "nodemailer": "^6.9.13",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "stripe": "^14.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
     "concurrently": "^8.2.2"
   }
 }

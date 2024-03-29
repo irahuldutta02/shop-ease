@@ -2,14 +2,15 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import { CLIENT_URL, PORT } from "./config/server.config.js";
+import path from "path";
+import { NODE_ENV, PORT } from "./config/server.config.js";
 import connectDB from "./db/db.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
 
-import productRoutes from "./routes/product.routes.js";
-import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import orderRoutes from "./routes/oder.routes.js";
+import productRoutes from "./routes/product.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 import passport from "./utils/passport.js";
 import stripeUtil from "./utils/stripe.js";
@@ -38,14 +39,24 @@ app.use(cookieParser());
 passport(app);
 stripeUtil(app);
 
-app.get("/", (req, res) => {
-  return res.status(200).send({ status: 200, message: "Server is up!" });
-});
-
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
+
+if (NODE_ENV === "production") {
+  const __dirname = path.resolve();
+
+  app.use(express.static(path.join(__dirname, "client", "dist")));
+
+  app.use("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running....");
+  });
+}
 
 app.use(notFound);
 app.use(errorHandler);

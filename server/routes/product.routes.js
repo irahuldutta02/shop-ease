@@ -17,7 +17,7 @@ router.route("/:id").get(getProductById);
 router.route("/create").post(protect, admin, createProduct);
 router.route("/update/:id").put(protect, admin, editProduct);
 router.route("/delete/:id").delete(protect, admin, deleteProduct);
-router.route("/reviews/:id").get(protect, getReviews);
+router.route("/reviews/:id").get(getReviews);
 router.route("/reviews/create/:id").patch(protect, createProductReview);
 
 export default router;

@@ -6,7 +6,7 @@ export const ContextProvider = ({ children }) => {
   if (getThemeFromLocalStorage === null) {
     localStorage.setItem("theme", "dark");
   }
-  const [theme, setTheme] = useState(getThemeFromLocalStorage);
+  const [theme, setTheme] = useState(getThemeFromLocalStorage || "dark");
 
   const [showCartConfirmModal, setShowCartConfirmModal] = useState(false);
   const [doNotShowAgainCartModal, setDoNotShowAgainCartModal] = useState(false);

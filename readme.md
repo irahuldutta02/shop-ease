@@ -6,6 +6,12 @@
 
 ### [Deployed at Render 🔗](https://shop-ease-a7ya.onrender.com/)
 
+### FYI
+
+- The Project is deployed on Render on free tier. It may take up to 50 seconds or few more to up the server depending upon your internet speed initially. It is not a performance issue.
+
+![Image](https://github.com/irahuldutta02/user-management/assets/78687135/6f9fd8eb-0303-441c-916f-0ff7b346787f)
+
 <!-- ## Video Preview -->
 
 ## Description
@@ -24,11 +30,7 @@
 - 👥 Admin can also add and remove other admins.
 - 📱 The design of the website is responsive and mobile-friendly.
 
-### FYI
 
-- The Project is deployed on Render on free tier. It may take up to 50 seconds or few more to up the server depending upon your internet speed initially. It is not a performance issue.
-
-![Image](https://github.com/irahuldutta02/user-management/assets/78687135/6f9fd8eb-0303-441c-916f-0ff7b346787f)
 
 ## Local Setup
 
@@ -47,17 +49,18 @@ cd shop-ease
 - Create a `.env` file in the root of the project
 - Add the following environment variables shown in the [`sample.env.txt`](./sample.env.txt) file
 
-### 3. Install dependencies
+### 3. Local Dev environment Setup for client
+
+- Make sure you comment out the `// for production` commented line and uncomment `// for development` commented line [`server.config.js`](./client/config/server.config.js) file inside the `./client/config` folder 
+- ** Make sure you do not push the changes of the server.config.js file for production. It is only for local development.
+
+### 4. Install dependencies
 
 ```bash
 npm run build
 ```
 
-### 4. Development Setup
-
-- make some code changes in the project as instructed in the [`dev.instruction.md`](./docs/dev.instruction.md) file
-
-### 3. Start the development server
+### 5. Start the development server
 
 ```bash
 npm run dev

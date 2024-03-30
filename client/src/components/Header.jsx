@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import toast from "react-hot-toast";
 import {
   IoClose,
   IoMenu,
@@ -7,18 +8,16 @@ import {
 } from "react-icons/io5";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxDotsHorizontal } from "react-icons/rx";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ThemeContext } from "../context";
-import toast from "react-hot-toast";
+import { OpenSearchDrawerContext, ThemeContext } from "../context";
 import { useLogoutMutation } from "../slices/userApiSlice";
 import { logout } from "../slices/userSlice";
 import { Search } from "./Search";
+import { formateString } from "../utils/formateString";
 
 export const Header = () => {
-  const [openDrawer, setOpenDrawer] = useState(false);
-
+  const { openDrawer, setOpenDrawer } = useContext(OpenSearchDrawerContext);
   const { theme, setTheme } = useContext(ThemeContext);
 
   const navigate = useNavigate();
@@ -69,16 +68,8 @@ export const Header = () => {
                     navigate("/profile");
                   }}
                 >
-                  <div>
-                    {userInfo?.name.length > 30
-                      ? userInfo?.name.slice(0, 30) + "..."
-                      : userInfo?.name}
-                  </div>
-                  <div>
-                    {userInfo?.email.length > 30
-                      ? userInfo?.email.slice(0, 30) + "..."
-                      : userInfo?.email}
-                  </div>
+                  <div>{formateString(userInfo?.name, 30)}</div>
+                  <div>{formateString(userInfo?.email, 30)}</div>
                   {userInfo?.isAdmin && (
                     <div className="badge badge-primary">Admin</div>
                   )}

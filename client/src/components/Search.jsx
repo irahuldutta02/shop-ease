@@ -1,12 +1,18 @@
 import { FaSearch } from "react-icons/fa";
 import { useGetProductsQuery } from "../slices/productApiSlice";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { formateString } from "../utils/formateString";
+import { OpenSearchDrawerContext } from "../context";
 
 export const Search = () => {
   const { data, isLoading, error, refetch } = useGetProductsQuery();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+
+  const { setOpenDrawer, openSearchMenu, setOpenSearchMenu } = useContext(
+    OpenSearchDrawerContext
+  );
 
   // modified products
   let products = [];
@@ -15,8 +21,7 @@ export const Search = () => {
       return (
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
 
@@ -27,53 +32,90 @@ export const Search = () => {
     refetch();
   }, [refetch]);
 
+  const handleClick = (productId) => {
+    navigate(`/product/${productId}`);
+    setSearchTerm("");
+    setOpenDrawer(false);
+    setOpenSearchMenu(false);
+  };
+
+  const onChange = (e) => {
+    setSearchTerm(e.target.value);
+    setOpenSearchMenu(true);
+  };
+
   return (
     <>
-      <div className="flex justify-center items-center">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="">
-            <label className="input input-sm input-bordered flex items-center gap-2">
-              <input
-                type="text"
-                className="grow"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                }}
-              />
-              <FaSearch />
-            </label>
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 mt-4"
-          >
-            {!isLoading && !error && products.length === 0 && (
-              <li>
-                <div className="text-center">
-                  {searchTerm.length > 0
-                    ? "No products found"
-                    : "Start searching"}
+      <div className="flex justify-center items-center relative">
+        <div className="w-60">
+          <label className="input input-sm input-bordered flex items-center gap-2 w-full">
+            <input
+              type="text"
+              className="grow w-full"
+              placeholder="Search"
+              value={searchTerm}
+              onChange={onChange}
+            />
+            <FaSearch />
+          </label>
+        </div>
+        {openSearchMenu && (
+          <ul className="searchMenu w-full bg-base-100 rounded-lg flex flex-col justify-start items-center gap-2 overflow-y-auto max-h-96 absolute top-10">
+            {!isLoading &&
+              !error &&
+              products?.length > 0 &&
+              products.map((product) => {
+                return (
+                  <li
+                    key={product?._id}
+                    className="rounded-lg w-full cursor-pointer"
+                  >
+                    <div
+                      className="p-2"
+                      onClick={() => handleClick(product?._id)}
+                    >
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={product?.image}
+                          alt={product?.name}
+                          className="w-10 h-10 rounded-full"
+                        />
+                        <div>
+                          <p className="text-sm">
+                            {formateString(product?.name, 23)}
+                          </p>
+                          <p className="text-xs">{product?.brand}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            {!isLoading && !error && products?.length === 0 && (
+              <li className="rounded-lg w-full">
+                <div className="p-2 text-center">
+                  <p className="text-sm">No products found</p>
                 </div>
               </li>
             )}
-            {!isLoading &&
-              !error &&
-              products.length > 0 &&
-              products.map((product) => (
-                <li
-                  key={product._id}
-                  onClick={() => {
-                    navigate(`product/${product?._id}`);
-                    setSearchTerm("");
-                  }}
-                >
-                  <div>{product?.name}</div>
-                </li>
-              ))}
+            {isLoading && (
+              <li className="rounded-lg w-full">
+                <div className="p-2 text-center">
+                  <span className="loading loading-dots loading-sm"></span>
+                </div>
+              </li>
+            )}
+            {error && (
+              <li className="rounded-lg w-full">
+                <div className="p-2 text-center">
+                  <p className="text-sm text-red-500">
+                    Error fetching products
+                  </p>
+                </div>
+              </li>
+            )}
           </ul>
-        </div>
+        )}
       </div>
     </>
   );

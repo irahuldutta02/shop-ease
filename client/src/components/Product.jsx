@@ -3,6 +3,7 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { formateString } from "../utils/formateString";
 
 export const Product = ({ product }) => {
   const navigate = useNavigate();
@@ -49,18 +50,14 @@ export const Product = ({ product }) => {
         </figure>
 
         <div className="card-body gap-3">
-          <h2 className="card-title ">{product.name}</h2>
+          <h2 className="card-title ">{formateString(product?.name, 40)}</h2>
           <div className="card-actions">
             <div className="badge badge-primary">Rating: {product.rating}</div>
             <div className="badge badge-secondary">
               Reviews: {product.numReviews}
             </div>
           </div>
-          <p>
-            {product.description.length > 90
-              ? product.description.substring(0, 90).trim() + "..."
-              : product.description}
-          </p>
+          <p>{formateString(product?.description, 90)}</p>
           <div className="card-actions items-center justify-end">
             <div className="">${product.price}</div>
             {/* buy now or go to cart */}

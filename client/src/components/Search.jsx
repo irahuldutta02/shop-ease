@@ -44,9 +44,22 @@ export const Search = () => {
     setOpenSearchMenu(true);
   };
 
+  useEffect(() => {
+    window.addEventListener("click", (e) => {
+      if (
+        e.target.closest(".searchDiv") ||
+        e.target.closest(".openDrawerBtn")
+      ) {
+        return;
+      }
+      setSearchTerm("");
+      setOpenSearchMenu(false);
+    });
+  }, [setOpenDrawer, setOpenSearchMenu]);
+
   return (
     <>
-      <div className="flex justify-center items-center relative">
+      <div className="searchDiv flex justify-center items-center relative">
         <div className="w-60">
           <label className="input input-sm input-bordered flex items-center gap-2 w-full">
             <input

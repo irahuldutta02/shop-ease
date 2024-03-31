@@ -161,7 +161,7 @@ export const Header = () => {
     <>
       <div className="flex justify-center items-center fixed w-full z-[10] bg-neutral">
         <div className="navbar bg-neutral  max-w-6xl">
-          <div className="flex-none md:hidden">
+          <div className="openDrawerBtn flex-none md:hidden">
             <button
               className="btn btn-square btn-ghost"
               onClick={() => setOpenDrawer(!openDrawer)}

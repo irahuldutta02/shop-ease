@@ -14,10 +14,12 @@ import userRoutes from "./routes/user.routes.js";
 
 import passport from "./utils/passport.js";
 import stripeUtil from "./utils/stripe.js";
+import job from "./jobs/cron.js";
 
 const app = express();
 connectDB();
 
+job.start();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
